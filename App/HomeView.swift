@@ -13,8 +13,8 @@ struct HomeView: View {
             VStack(alignment: .leading, spacing: 26) {
                 HStack {
                     VStack(alignment: .leading, spacing: 5) {
-                        Text("ТВОЙ МАЛЕНЬКИЙ СПУТНИК").font(.system(size: 10, weight: .bold, design: .monospaced)).tracking(2)
-                        Text("Привет, Мурчик").font(.system(size: 32, weight: .bold, design: .rounded))
+                        Text("ТВІЙ МАЛЕНЬКИЙ СУПУТНИК").font(.system(size: 10, weight: .bold, design: .monospaced)).tracking(2)
+                        Text("Привіт, Мурчику").font(.system(size: 32, weight: .bold, design: .rounded))
                     }
                     Spacer()
                     Image(systemName: "pawprint.fill").font(.title2).foregroundStyle(.orange)
@@ -24,9 +24,9 @@ struct HomeView: View {
                     let tick = Int(date.timeIntervalSince1970 / 0.35)
                     VStack(spacing: 16) {
                         HStack {
-                            Label("ДОМА", systemImage: "sparkle").font(.caption.weight(.bold))
+                            Label("ВДОМА", systemImage: "sparkle").font(.caption.weight(.bold))
                             Spacer()
-                            Text("всё хорошо").font(.caption)
+                            Text("усе добре").font(.caption)
                         }.foregroundStyle(.white.opacity(0.7))
                         ZStack {
                             Ellipse().fill(.white.opacity(0.06)).frame(width: 220, height: 60).offset(y: 60)
@@ -38,7 +38,7 @@ struct HomeView: View {
                                 .onTapGesture { care(.pet) }
                         }.frame(height: 190).accessibilityAddTraits(.isButton)
                         Text(pet.mood(at: date)).font(.system(.headline, design: .rounded)).foregroundStyle(.white)
-                        Text("Нажми на котика, чтобы погладить").font(.caption).foregroundStyle(.white.opacity(0.5))
+                        Text("Торкнися котика, щоб погладити").font(.caption).foregroundStyle(.white.opacity(0.5))
                     }
                     .padding(24).frame(maxWidth: .infinity)
                     .background(Color(red: 0.17, green: 0.23, blue: 0.22), in: RoundedRectangle(cornerRadius: 30))
@@ -46,50 +46,50 @@ struct HomeView: View {
                 TimelineView(.periodic(from: .now, by: 60)) { context in
                     let current = pet.at(context.date)
                     HStack(spacing: 14) {
-                        meter("Сытость", "fish.fill", current.food, .orange)
-                        meter("Радость", "heart.fill", current.joy, .pink)
-                        meter("Энергия", "moon.fill", current.energy, .indigo)
+                        meter("Ситість", "fish.fill", current.food, .orange)
+                        meter("Радість", "heart.fill", current.joy, .pink)
+                        meter("Енергія", "moon.fill", current.energy, .indigo)
                     }
                 }
                 HStack(spacing: 12) {
-                    careButton("Кормить", "fish.fill", .feed)
-                    careButton("Играть", "tennisball.fill", .play)
-                    careButton("Спать", "moon.stars.fill", .sleep)
+                    careButton("Годувати", "fish.fill", .feed)
+                    careButton("Грати", "tennisball.fill", .play)
+                    careButton("Спати", "moon.stars.fill", .sleep)
                 }
                 #if !BASIC_BUILD
                 VStack(alignment: .leading, spacing: 14) {
-                    Label("Всегда рядом", systemImage: "platter.filled.top.iphone").font(.title3.bold())
-                    Text("Посели Мурчика в Dynamic Island и на экране блокировки.").font(.subheadline).foregroundStyle(.secondary)
+                    Label("Завжди поруч", systemImage: "platter.filled.top.iphone").font(.title3.bold())
+                    Text("Посели Мурчика в Dynamic Island і на екрані блокування.").font(.subheadline).foregroundStyle(.secondary)
                     Button {
                         Task {
                             if active { await CatActivity.stop() }
                             else {
                                 do { try CatActivity.start(pet) }
-                                catch { self.error = error.localizedDescription }
+                                catch { self.error = CatLanguage.error(error) }
                             }
                             active = !Activity<CatAttributes>.activities.isEmpty
                         }
                     } label: {
-                        Text(active ? "Убрать с островка" : "Поселить на островке")
+                        Text(active ? "Прибрати з острівця" : "Поселити на острівці")
                             .font(.headline).frame(maxWidth: .infinity).padding(16)
                             .background(Color(red: 0.27, green: 0.37, blue: 0.29), in: Capsule()).foregroundStyle(.white)
                     }
-                    Text("Зажми Dynamic Island, чтобы покормить котика или поиграть. На iPhone без островка он появится на экране блокировки.").font(.caption).foregroundStyle(.secondary)
+                    Text("Затисни Dynamic Island, щоб нагодувати котика або пограти. На iPhone без острівця він з’явиться на екрані блокування.").font(.caption).foregroundStyle(.secondary)
                 }.padding(22).background(.white.opacity(0.7), in: RoundedRectangle(cornerRadius: 24))
                 VStack(alignment: .leading, spacing: 10) {
-                    Text("Домик на главном экране").font(.headline)
-                    Text("Зажми свободное место на экране «Домой» → добавь виджет → найди «Мурчик». Выбери маленький или средний домик.").font(.subheadline).foregroundStyle(.secondary)
-                    Text("iOS сама выбирает время обновления виджетов. Live Activity работает ограниченное время; прогулки и реакции обновляются при взаимодействии и открытии приложения.").font(.caption).foregroundStyle(.secondary)
+                    Text("Хатинка на початковому екрані").font(.headline)
+                    Text("Затисни вільне місце на початковому екрані → додай віджет → знайди «Мурчик». Вибери малу або середню хатинку.").font(.subheadline).foregroundStyle(.secondary)
+                    Text("iOS самостійно обирає час оновлення віджетів. Live Activity працює обмежений час; прогулянки й реакції оновлюються під час взаємодії та відкриття застосунку.").font(.caption).foregroundStyle(.secondary)
                 }
                 #else
-                Text("Мурчик живёт в этом приложении. Эта версия для бесплатной установки не использует виджеты и Dynamic Island.")
+                Text("Мурчик живе в цьому застосунку. Ця версія для безкоштовного встановлення не використовує віджети та Dynamic Island.")
                     .font(.caption).foregroundStyle(.secondary)
                 #endif
             }.padding(24)
         }
         .background(cream.ignoresSafeArea()).foregroundStyle(Color(red: 0.2, green: 0.25, blue: 0.21))
-        .alert("Не удалось включить островок", isPresented: Binding(get: { error != nil }, set: { if !$0 { error = nil } })) {
-            Button("Понятно") { error = nil }
+        .alert("Не вдалося ввімкнути острівець", isPresented: Binding(get: { error != nil }, set: { if !$0 { error = nil } })) {
+            Button("Зрозуміло") { error = nil }
         } message: { Text(error ?? "") }
         .task { await refresh() }
         .onChange(of: scenePhase) { _, phase in

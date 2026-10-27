@@ -23,7 +23,7 @@ struct CozyHomeView: View {
                 if tab == 0 { home }
                 else if tab == 1 { PlayRoomView(model: model) }
                 else { CollectionView(model: model) }
-                Text("Маленький котик. Большая любовь.").font(.system(size: 10, weight: .medium, design: .rounded))
+                Text("Маленький котик. Велика любов.").font(.system(size: 10, weight: .medium, design: .rounded))
                     .foregroundStyle(CatTheme.ink.opacity(0.4)).frame(maxWidth: .infinity).padding(.vertical, 12)
             }.padding(.horizontal, 22).padding(.top, 16)
         }
@@ -36,6 +36,7 @@ struct CozyHomeView: View {
             if phase == .active { model.refresh() } else { model.silence() }
         }
         .onReceive(clock) { _ in if scenePhase == .active { model.tick() } }
+        .environment(\.locale, CatLanguage.locale)
     }
 
     private var header: some View {
@@ -51,16 +52,16 @@ struct CozyHomeView: View {
                 .background(Color(hex: 0xF1E5CC), in: Capsule())
             Button { name = model.pet.name; settings = true } label: {
                 Image(systemName: "slider.horizontal.3").frame(width: 36, height: 36).background(.white.opacity(0.7), in: Circle())
-            }.accessibilityLabel("Имя, звук и настройки")
+            }.accessibilityLabel("Ім’я, звук і налаштування")
         }
     }
 
     private var introduction: some View {
         VStack(alignment: .leading, spacing: 9) {
-            Text("ТВОЙ МАЛЕНЬКИЙ СПУТНИК").font(.system(size: 9, weight: .semibold)).tracking(2).foregroundStyle(CatTheme.rose)
-            Text("Дома там,\nгде мурчат.").font(.system(size: 37, weight: .medium, design: .serif)).tracking(-1)
+            Text("ТВІЙ МАЛЕНЬКИЙ СУПУТНИК").font(.system(size: 9, weight: .semibold)).tracking(2).foregroundStyle(CatTheme.rose)
+            Text("Дім там,\nде муркочуть.").font(.system(size: 37, weight: .medium, design: .serif)).tracking(-1)
             HStack {
-                Text("\(model.pet.name) рад, что ты здесь.").font(.system(size: 12)).foregroundStyle(.secondary)
+                Text("\(model.pet.name) радий, що ти тут.").font(.system(size: 12)).foregroundStyle(.secondary)
                 Spacer()
                 Label("\(model.pet.streak) дн.", systemImage: "flame.fill").font(.caption).foregroundStyle(CatTheme.rose)
             }
@@ -71,7 +72,7 @@ struct CozyHomeView: View {
         HStack(spacing: 4) {
             ForEach(0..<3) { index in
                 Button { withAnimation(.easeInOut(duration: 0.2)) { tab = index } } label: {
-                    Label(["Домик", "Приключения", "Коллекция"][index], systemImage: ["house.fill", "sparkles", "gift.fill"][index])
+                    Label(["Хатинка", "Пригоди", "Колекція"][index], systemImage: ["house.fill", "sparkles", "gift.fill"][index])
                         .font(.system(size: 10, weight: .semibold)).frame(maxWidth: .infinity).padding(.vertical, 13)
                         .background(tab == index ? Color.white : Color.clear, in: Capsule())
                         .foregroundStyle(tab == index ? CatTheme.rose : CatTheme.ink.opacity(0.5))
@@ -86,8 +87,8 @@ struct CozyHomeView: View {
             FloatingCatCard(model: model)
             TransparentCatCard(model: model)
             HStack(spacing: 10) {
-                need("Сытость", "fish.fill", model.pet.food, Color(hex: 0xCEA273))
-                need("Радость", "heart.fill", model.pet.joy, CatTheme.rose)
+                need("Ситість", "fish.fill", model.pet.food, Color(hex: 0xCEA273))
+                need("Радість", "heart.fill", model.pet.joy, CatTheme.rose)
                 need("Сон", "moon.fill", model.pet.energy, CatTheme.lavender)
                 need("Вода", "drop.fill", model.pet.water, Color(hex: 0x8FB5BE))
             }
@@ -108,7 +109,7 @@ struct CozyHomeView: View {
                 Spacer()
                 Button { model.change { $0.room = ($0.room + 1) % 3 }; model.feedback("sparkle") } label: {
                     Image(systemName: "arrow.triangle.2.circlepath").font(.caption)
-                }.accessibilityLabel("Сменить комнату")
+                }.accessibilityLabel("Змінити кімнату")
             }.padding(16).background(Color(hex: 0xF4E8E0))
             InteractiveCatRoom(model: model).frame(height: 320)
             VStack(spacing: 7) {
@@ -131,10 +132,10 @@ struct CozyHomeView: View {
 
     private var careButtons: some View {
         LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 10), count: 3), spacing: 10) {
-            careButton(model.pet.sleeping ? "Разбудить" : "Спать", "moon.stars.fill", .sleep, 0xE6DFF0)
+            careButton(model.pet.sleeping ? "Розбудити" : "Спати", "moon.stars.fill", .sleep, 0xE6DFF0)
             careButton("Водичка", "drop.fill", .drink, 0xDDECF0)
-            careButton("Причесать", "comb.fill", .brush, 0xE3E8D7)
-            Button { tab = 1; model.feedback("meow") } label: { actionLabel("Играть", "sparkles", 0xF3E9C8) }.buttonStyle(.plain)
+            careButton("Причесати", "comb.fill", .brush, 0xE3E8D7)
+            Button { tab = 1; model.feedback("meow") } label: { actionLabel("Грати", "sparkles", 0xF3E9C8) }.buttonStyle(.plain)
         }
     }
 
@@ -154,43 +155,43 @@ struct CozyHomeView: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Image(systemName: "pawprint.fill").foregroundStyle(CatTheme.rose)
-                Text("Уровень \(model.pet.level)").font(.system(.subheadline, design: .rounded).bold())
+                Text("Рівень \(model.pet.level)").font(.system(.subheadline, design: .rounded).bold())
                 Spacer()
                 Text("\(model.pet.xp % 100) / 100 XP").font(.caption2).foregroundStyle(.secondary)
             }
             ProgressView(value: Double(model.pet.xp % 100), total: 100).tint(CatTheme.rose)
-            Text("Забота и приключения делают вашу дружбу крепче.").font(.system(size: 10)).foregroundStyle(.secondary)
+            Text("Турбота й пригоди зміцнюють вашу дружбу.").font(.system(size: 10)).foregroundStyle(.secondary)
         }.softCard()
     }
 
     private var widgetCard: some View {
         VStack(alignment: .leading, spacing: 13) {
-            Label("Котик всегда рядом", systemImage: "iphone").font(.system(.headline, design: .rounded))
-            Text("На iPhone 13 Pro Max котик живёт в виджетах и на экране блокировки.").font(.system(size: 12)).foregroundStyle(.secondary)
+            Label("Котик завжди поруч", systemImage: "iphone").font(.system(.headline, design: .rounded))
+            Text("На iPhone 13 Pro Max котик живе у віджетах і на екрані блокування.").font(.system(size: 12)).foregroundStyle(.secondary)
             Button { model.toggleActivity() } label: {
-                Text(model.activityRunning ? "Убрать с экрана блокировки" : "На экран блокировки ♡")
+                Text(model.activityRunning ? "Прибрати з екрана блокування" : "На екран блокування ♡")
                     .font(.system(size: 12, weight: .semibold)).foregroundStyle(.white).padding(15).frame(maxWidth: .infinity).background(CatTheme.rose, in: Capsule())
             }
-            Text("Добавить виджет: зажми экран «Домой» → Изменить → Добавить виджет → Мурчик.").font(.system(size: 11)).foregroundStyle(.secondary)
+            Text("Додати віджет: затисни початковий екран → Змінити → Додати віджет → Мурчик.").font(.system(size: 11)).foregroundStyle(.secondary)
             if !PetStore.sharingAvailable {
-                Label("Подпись не дала доступ к общим данным. Виджет может показывать отдельного котика; Live Activity получает данные из приложения.", systemImage: "info.circle")
+                Label("Підпис не надав доступу до спільних даних. Віджет може показувати окремого котика; Live Activity отримує дані із застосунку.", systemImage: "info.circle")
                     .font(.system(size: 10)).foregroundStyle(CatTheme.rose)
             }
-            Text("iOS управляет обновлением виджетов. Непрерывная прогулка и звуки доступны в открытом приложении.").font(.system(size: 9)).foregroundStyle(.secondary)
+            Text("iOS керує оновленням віджетів. Безперервна прогулянка та звуки доступні у відкритому застосунку.").font(.system(size: 9)).foregroundStyle(.secondary)
         }.softCard()
     }
 
     private var settingsSheet: some View {
         NavigationStack {
             Form {
-                Section("Знакомься, твой котик") { TextField("Имя котика", text: $name).onChange(of: name) { _, value in name = String(value.prefix(24)) } }
-                Section("Маленькие радости") {
-                    Toggle("Звуки и мурчание", isOn: Binding(get: { model.pet.soundEnabled }, set: { value in model.change { $0.soundEnabled = value }; if value { model.feedback("meow") } else { model.silence() } }))
-                    Toggle("Мягкая вибрация", isOn: Binding(get: { model.pet.hapticsEnabled }, set: { value in model.change { $0.hapticsEnabled = value } }))
-                    Button("Послушать мяу") { model.feedback("meow") }
+                Section("Знайомся, твій котик") { TextField("Ім’я котика", text: $name).onChange(of: name) { _, value in name = String(value.prefix(24)) } }
+                Section("Маленькі радощі") {
+                    Toggle("Звуки та муркотіння", isOn: Binding(get: { model.pet.soundEnabled }, set: { value in model.change { $0.soundEnabled = value }; if value { model.feedback("meow") } else { model.silence() } }))
+                    Toggle("М’яка вібрація", isOn: Binding(get: { model.pet.hapticsEnabled }, set: { value in model.change { $0.hapticsEnabled = value } }))
+                    Button("Послухати няв") { model.feedback("meow") }
                 }
-                Section { Text("Звук уважает беззвучный режим iPhone. Данные хранятся на устройстве. Обновляй приложение поверх старой версии, чтобы сохранить котика.").font(.caption).foregroundStyle(.secondary) }
-            }.navigationTitle("Твой маленький друг").navigationBarTitleDisplayMode(.inline)
+                Section { Text("Дані зберігаються на пристрої. Щоб зберегти котика, встановлюй оновлення поверх попередньої версії. Звуки й вібрацію можна вимкнути вище.").font(.caption).foregroundStyle(.secondary) }
+            }.navigationTitle("Твій маленький друг").navigationBarTitleDisplayMode(.inline)
                 .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Готово") {
                     let clean = name.trimmingCharacters(in: .whitespacesAndNewlines)
                     if !clean.isEmpty { model.change { $0.name = clean } }

@@ -175,24 +175,24 @@ struct Pet: Codable {
     }
 
     func mood(at date: Date) -> String {
-        if sleeping { return "Сладко спит" }
-        if let end = focusEnd, date < end { return "Сосредоточен вместе с тобой" }
+        if sleeping { return "Солодко спить" }
+        if let end = focusEnd, date < end { return "Зосереджується разом із тобою" }
         if date.timeIntervalSince(actionDate) < 30 {
             switch lastAction {
-            case .feed: return "Вкусно хрустит"
-            case .play: return "Ловит клубочек"
-            case .sleep: return "Потягивается после сна"
-            case .pet: return "Мурчит для тебя"
-            case .brush: return "Наводит пушистый порядок"
-            case .drink: return "Пьёт свежую водичку"
+            case .feed: return "Смачно хрумтить"
+            case .play: return "Ловить клубочок"
+            case .sleep: return "Потягується після сну"
+            case .pet: return "Муркоче для тебе"
+            case .brush: return "Чепурить пухнасті лапки"
+            case .drink: return "П’є свіжу водичку"
             }
         }
         let current = at(date)
-        if current.food < 25 { return "Мечтает о рыбке" }
-        if current.water < 25 { return "Ждёт водичку" }
-        if current.energy < 25 { return "Сонно щурит глазки" }
+        if current.food < 25 { return "Мріє про рибку" }
+        if current.water < 25 { return "Чекає на водичку" }
+        if current.energy < 25 { return "Сонно примружує оченята" }
         let index = abs(Int(date.timeIntervalSince1970 / 18) % 6)
-        return ["Исследует свой домик", "Умывает лапки", "Смотрит на звёзды", "Сладко потягивается", "Ловит свой хвост", "Охотится на пылинку"][index]
+        return ["Досліджує свою хатинку", "Умиває лапки", "Дивиться на зірки", "Солодко потягується", "Ловить свій хвіст", "Полює на пилинку"][index]
     }
 
     func isSleeping(at date: Date) -> Bool { sleeping }

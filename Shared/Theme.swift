@@ -7,8 +7,8 @@ enum CatTheme {
     static let sage = Color(hex: 0x879B83)
     static let lavender = Color(hex: 0xAAA1C2)
     static let coats: [Color] = [Color(hex: 0xECAF7A), Color(hex: 0xAAA8BD), Color(hex: 0x5F5669), Color(hex: 0xEEE0CA), Color(hex: 0xD59D93), Color(hex: 0xB28D70)]
-    static let roomNames = ["Солнечная гостиная", "Лунная мансарда", "Тайный сад"]
-    static let hatNames = ["Без украшений", "Бантик", "Берет", "Корона"]
+    static let roomNames = ["Сонячна вітальня", "Місячна мансарда", "Таємний сад"]
+    static let hatNames = ["Без прикрас", "Бантик", "Берет", "Корона"]
 }
 
 extension Color {

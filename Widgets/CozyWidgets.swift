@@ -8,8 +8,8 @@ struct CozyHomeWidget: Widget {
             CozyWidgetView(entry: entry)
                 .containerBackground(CatTheme.paper, for: .widget)
         }
-        .configurationDisplayName("Уютный домик")
-        .description("Комната, твой котик и забота одним касанием.")
+        .configurationDisplayName("Затишна хатинка")
+        .description("Кімната, твій котик і турбота одним дотиком.")
         .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
         .contentMarginsDisabled()
     }
@@ -27,7 +27,7 @@ struct CozyWidgetView: View {
                 Image(systemName: "pawprint.fill").foregroundStyle(CatTheme.rose).font(.system(size: 10))
                 Text(entry.pet.name).font(.system(size: 12, weight: .bold, design: .rounded)).lineLimit(1).minimumScaleFactor(0.7)
                 Spacer(minLength: 0)
-                if !small { Text("LV \(entry.pet.level)").font(.system(size: 8, weight: .semibold)).foregroundStyle(CatTheme.rose) }
+                if !small { Text("Рів. \(entry.pet.level)").font(.system(size: 8, weight: .semibold)).foregroundStyle(CatTheme.rose) }
             }.padding(.horizontal, 15).padding(.top, 12).padding(.bottom, 5)
             if small {
                 ZStack {
@@ -35,9 +35,9 @@ struct CozyWidgetView: View {
                     VStack { Spacer(); Text(entry.pet.mood(at: entry.date)).font(.system(size: 8, weight: .medium)).lineLimit(1).padding(5).background(CatTheme.paper.opacity(0.9), in: Capsule()).padding(.bottom, 3) }
                 }
                 HStack {
-                    Button(intent: FeedCatIntent()) { Label("\(entry.pet.fish)", systemImage: "fish.fill") }.disabled(entry.pet.fish == 0).accessibilityLabel("Покормить. В запасе \(entry.pet.fish) рыбок")
+                    Button(intent: FeedCatIntent()) { Label("\(entry.pet.fish)", systemImage: "fish.fill") }.disabled(entry.pet.fish == 0).accessibilityLabel("Нагодувати. У запасі \(entry.pet.fish) рибок")
                     Spacer()
-                    Button(intent: PetCatIntent()) { Image(systemName: "heart.fill") }.accessibilityLabel("Погладить")
+                    Button(intent: PetCatIntent()) { Image(systemName: "heart.fill") }.accessibilityLabel("Погладити")
                 }.font(.system(size: 11)).buttonStyle(.plain).foregroundStyle(CatTheme.rose).padding(.horizontal, 24).padding(.vertical, 9)
             } else {
                 HStack(spacing: 0) {
@@ -51,15 +51,15 @@ struct CozyWidgetView: View {
                 }.frame(maxHeight: .infinity)
                 if large {
                     HStack {
-                        Label("\(entry.pet.streak) дней вместе", systemImage: "flame.fill")
+                        Label("\(entry.pet.streak) днів разом", systemImage: "flame.fill")
                         Spacer()
                         Text("\(entry.pet.coins) ✦")
                     }.font(.system(size: 10)).foregroundStyle(CatTheme.rose).padding(.horizontal, 18).padding(.vertical, 8)
                 }
                 HStack(spacing: 6) {
-                    Button(intent: FeedCatIntent()) { Label("Кормить · \(entry.pet.fish)", systemImage: "fish.fill") }.disabled(entry.pet.fish == 0)
-                    Button(intent: PetCatIntent()) { Label("Гладить", systemImage: "heart.fill") }
-                    Button(intent: SleepCatIntent()) { Image(systemName: entry.pet.sleeping ? "sun.max.fill" : "moon.fill") }.accessibilityLabel(entry.pet.sleeping ? "Разбудить" : "Спать")
+                    Button(intent: FeedCatIntent()) { Label("Годувати · \(entry.pet.fish)", systemImage: "fish.fill") }.disabled(entry.pet.fish == 0)
+                    Button(intent: PetCatIntent()) { Label("Гладити", systemImage: "heart.fill") }
+                    Button(intent: SleepCatIntent()) { Image(systemName: entry.pet.sleeping ? "sun.max.fill" : "moon.fill") }.accessibilityLabel(entry.pet.sleeping ? "Розбудити" : "Спати")
                 }.font(.system(size: 10)).lineLimit(1).minimumScaleFactor(0.7).buttonStyle(.bordered).tint(CatTheme.rose).padding(.bottom, 9)
             }
         }.foregroundStyle(CatTheme.ink)
@@ -79,8 +79,8 @@ struct CatNeedsWidget: Widget {
         StaticConfiguration(kind: "CatLockScreen", provider: CatProvider()) { entry in
             LockCatView(entry: entry).containerBackground(.clear, for: .widget)
         }
-        .configurationDisplayName("Котик на экране блокировки")
-        .description("Маленький друг и его настроение — прямо рядом с часами.")
+        .configurationDisplayName("Котик на екрані блокування")
+        .description("Маленький друг і його настрій — поруч із годинником.")
         .supportedFamilies([.accessoryCircular, .accessoryRectangular, .accessoryInline])
     }
 }
@@ -104,7 +104,7 @@ struct LockCatView: View {
                 VStack(alignment: .leading, spacing: 3) {
                     Text(entry.pet.name).font(.headline)
                     Text(entry.pet.mood(at: entry.date)).font(.caption2).lineLimit(1)
-                    Text("Сытость \(Int(entry.pet.food))% · ♡ \(Int(entry.pet.joy))%").font(.system(size: 9))
+                    Text("Ситість \(Int(entry.pet.food))% · ♡ \(Int(entry.pet.joy))%").font(.system(size: 9))
                 }
             }
         }
@@ -120,20 +120,20 @@ struct CozyLiveActivity: Widget {
                         .frame(width: 58, height: 50)
                     VStack(alignment: .leading, spacing: 4) {
                         Text(context.attributes.name).font(.system(.headline, design: .rounded))
-                        Text(context.isStale ? "Ждёт маленького знака внимания ♡" : context.state.mood).font(.caption).lineLimit(1)
+                        Text(context.isStale ? "Чекає на маленький знак уваги ♡" : context.state.mood).font(.caption).lineLimit(1)
                         if let end = context.state.focusEnd, end > Date() {
                             Text(timerInterval: Date()...end, countsDown: true).font(.system(.title3, design: .rounded)).monospacedDigit()
                         } else {
-                            Text("Сытость \(context.state.food)% · Радость \(context.state.joy)%").font(.caption2).foregroundStyle(.secondary)
+                            Text("Ситість \(context.state.food)% · Радість \(context.state.joy)%").font(.caption2).foregroundStyle(.secondary)
                         }
                     }
                     Spacer(minLength: 0)
                     Image(systemName: "heart.fill").foregroundStyle(CatTheme.rose.opacity(0.45))
                 }
                 HStack(spacing: 10) {
-                    Button(intent: FeedCatIntent()) { Label("Кормить", systemImage: "fish.fill") }
-                    Button(intent: PetCatIntent()) { Label("Гладить", systemImage: "heart.fill") }
-                    Button(intent: SleepCatIntent()) { Image(systemName: context.state.sleeping ? "sun.max.fill" : "moon.fill") }.accessibilityLabel("Сон и пробуждение")
+                    Button(intent: FeedCatIntent()) { Label("Годувати", systemImage: "fish.fill") }
+                    Button(intent: PetCatIntent()) { Label("Гладити", systemImage: "heart.fill") }
+                    Button(intent: SleepCatIntent()) { Image(systemName: context.state.sleeping ? "sun.max.fill" : "moon.fill") }.accessibilityLabel("Сон і пробудження")
                 }.font(.system(size: 11)).buttonStyle(.bordered).tint(CatTheme.rose)
             }.padding(17).foregroundStyle(CatTheme.ink)
                 .activityBackgroundTint(CatTheme.paper).activitySystemActionForegroundColor(CatTheme.rose)
@@ -143,14 +143,14 @@ struct CozyLiveActivity: Widget {
                 DynamicIslandExpandedRegion(.center) {
                     VStack(spacing: 4) {
                         Text(context.attributes.name).font(.headline)
-                        Text(context.isStale ? "Ждёт тебя ♡" : context.state.mood).font(.caption2)
+                        Text(context.isStale ? "Чекає на тебе ♡" : context.state.mood).font(.caption2)
                     }
                 }
                 DynamicIslandExpandedRegion(.trailing) { Text("\(context.state.food)%").font(.caption).foregroundStyle(.orange) }
                 DynamicIslandExpandedRegion(.bottom) {
                     HStack {
-                        Button(intent: FeedCatIntent()) { Label("Кормить", systemImage: "fish.fill") }
-                        Button(intent: PetCatIntent()) { Label("Гладить", systemImage: "heart.fill") }
+                        Button(intent: FeedCatIntent()) { Label("Годувати", systemImage: "fish.fill") }
+                        Button(intent: PetCatIntent()) { Label("Гладити", systemImage: "heart.fill") }
                     }.buttonStyle(.bordered).tint(.pink)
                 }
             } compactLeading: { cat(context.state).frame(width: 26, height: 24) }

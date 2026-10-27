@@ -101,6 +101,6 @@ enum CatActivity {
 
     enum CatError: LocalizedError {
         case disabled
-        var errorDescription: String? { "Разреши Live Activities в настройках iPhone для Мурчика." }
+        var errorDescription: String? { "Дозволь Live Activities у налаштуваннях iPhone для Мурчика." }
     }
 }

@@ -50,9 +50,9 @@ struct InteractiveCatRoom: View {
                             }
                         }.onEnded { _ in strokePoint = nil; strokeDistance = 0 })
                         .accessibilityElement(children: .ignore)
-                        .accessibilityLabel("\(model.pet.name). Проведи пальцем по котику, чтобы погладить")
+                        .accessibilityLabel("\(model.pet.name). Проведи пальцем по котику, щоб погладити")
                         .accessibilityAddTraits(.isButton)
-                        .accessibilityAction(named: Text("Погладить")) { model.care(.pet); respond("♡ ♡ ♡") }
+                        .accessibilityAction(named: Text("Погладити")) { model.care(.pet); respond("♡ ♡ ♡") }
                         .position(center)
                     if reacting {
                         Text(reaction).font(.system(size: 25, weight: .bold, design: .rounded)).foregroundStyle(CatTheme.rose)
@@ -61,7 +61,7 @@ struct InteractiveCatRoom: View {
                         Text("z Z").font(.title3).foregroundStyle(CatTheme.lavender)
                             .position(x: center.x + 65, y: center.y - 50).allowsHitTesting(false)
                     }
-                    Text(draggingFood ? (nearMouth ? "Отпусти — хрум-хрум!" : "Поднеси рыбку к котику") : "Погладь котика пальцем · угости рыбкой ↓")
+                    Text(draggingFood ? (nearMouth ? "Відпусти — хрум-хрум!" : "Піднеси рибку до котика") : "Погладь котика пальцем · пригости рибкою ↓")
                         .font(.system(size: 10, weight: .medium)).foregroundStyle(CatTheme.ink)
                         .padding(.horizontal, 12).padding(.vertical, 7).background(.regularMaterial, in: Capsule())
                         .position(x: center.x, y: 24).allowsHitTesting(false)
@@ -80,14 +80,14 @@ struct InteractiveCatRoom: View {
                                 foodOffset = .zero; draggingFood = false
                             }
                         })
-                        .accessibilityLabel("Рыбка. Перетащи к котику, чтобы покормить")
+                        .accessibilityLabel("Рибка. Перетягни до котика, щоб нагодувати")
                         .accessibilityAddTraits(.isButton)
                         .accessibilityAction { if model.care(.feed) { respond("Хрум! ♡") } else { fishing = true } }
                         .position(foodPosition)
                     Text("×\(model.pet.fish)").font(.system(size: 11, weight: .bold, design: .rounded))
                         .foregroundStyle(CatTheme.ink).position(x: foodOrigin.x + 47, y: foodOrigin.y + 5).allowsHitTesting(false)
                     Button { fishing = true } label: {
-                        Label("К реке", systemImage: "water.waves").font(.system(size: 10, weight: .semibold))
+                        Label("До річки", systemImage: "water.waves").font(.system(size: 10, weight: .semibold))
                             .padding(10).background(.regularMaterial, in: Capsule())
                     }.position(x: size.width - 52, y: size.height - 40)
                 }.clipped()

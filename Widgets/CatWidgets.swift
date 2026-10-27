@@ -36,8 +36,8 @@ struct CatHomeWidget: Widget {
             CatHomeView(entry: entry)
                 .containerBackground(Color(red: 0.94, green: 0.95, blue: 0.88), for: .widget)
         }
-        .configurationDisplayName("Домик Мурчика")
-        .description("Котик, его настроение и немного заботы.")
+        .configurationDisplayName("Хатинка Мурчика")
+        .description("Котик, його настрій і трішки турботи.")
         .supportedFamilies([.systemSmall, .systemMedium, .accessoryRectangular])
     }
 }
@@ -62,7 +62,7 @@ struct CatHomeView: View {
                     cat.frame(width: 64, height: 56)
                     Text(entry.pet.mood(at: entry.date)).font(.caption).lineLimit(2)
                     if family == .systemSmall {
-                        Button(intent: FeedCatIntent()) { Label("Кормить", systemImage: "fish.fill").font(.caption2) }
+                        Button(intent: FeedCatIntent()) { Label("Годувати", systemImage: "fish.fill").font(.caption2) }
                             .tint(.brown)
                     }
                 }
@@ -92,12 +92,12 @@ struct CatLiveActivity: Widget {
                 PixelCat(sleeping: context.state.sleeping).frame(width: 60, height: 54)
                 VStack(alignment: .leading, spacing: 5) {
                     Text(context.attributes.name).font(.headline)
-                    Text(context.isStale ? "Котик ждёт тебя" : context.state.mood).font(.caption)
-                    Text("Сытость \(context.state.food)% · Радость \(context.state.joy)%").font(.caption2).foregroundStyle(.secondary)
+                    Text(context.isStale ? "Котик чекає на тебе" : context.state.mood).font(.caption)
+                    Text("Ситість \(context.state.food)% · Радість \(context.state.joy)%").font(.caption2).foregroundStyle(.secondary)
                 }
                 Spacer(minLength: 0)
                 Button(intent: FeedCatIntent()) { Image(systemName: "fish.fill") }
-                    .buttonStyle(.bordered).tint(.orange).accessibilityLabel("Покормить котика")
+                    .buttonStyle(.bordered).tint(.orange).accessibilityLabel("Нагодувати котика")
             }.padding(16)
                 .activityBackgroundTint(Color(red: 0.97, green: 0.95, blue: 0.88))
                 .activitySystemActionForegroundColor(.brown)
@@ -112,13 +112,13 @@ struct CatLiveActivity: Widget {
                 DynamicIslandExpandedRegion(.center) {
                     VStack(spacing: 4) {
                         Text(context.attributes.name).font(.headline)
-                        Text(context.isStale ? "Котик ждёт тебя" : context.state.mood).font(.caption2)
+                        Text(context.isStale ? "Котик чекає на тебе" : context.state.mood).font(.caption2)
                     }
                 }
                 DynamicIslandExpandedRegion(.bottom) {
                     HStack {
-                        Button(intent: FeedCatIntent()) { Label("Кормить", systemImage: "fish.fill") }
-                        Button(intent: PlayCatIntent()) { Label("Играть", systemImage: "tennisball.fill") }
+                        Button(intent: FeedCatIntent()) { Label("Годувати", systemImage: "fish.fill") }
+                        Button(intent: PlayCatIntent()) { Label("Грати", systemImage: "tennisball.fill") }
                     }.buttonStyle(.bordered).tint(.orange)
                 }
             } compactLeading: {

@@ -6,7 +6,7 @@ import AVKit
 final class FloatingCat: NSObject, ObservableObject, AVPictureInPictureControllerDelegate {
     @Published var preparing = false
     @Published var active = false
-    @Published var message = "Твой маленький спутник — в плавающем окне"
+    @Published var message = "Твій маленький супутник — у плавучому вікні"
     @Published var ready = false
     let player = AVQueuePlayer()
     private var looper: AVPlayerLooper?
@@ -29,7 +29,7 @@ final class FloatingCat: NSObject, ObservableObject, AVPictureInPictureControlle
         let key = "\(pet.coat)-\(pet.room)-\(pet.hat)-\(pet.sleeping)"
         guard !preparing, key != identity, !active else { return }
         preparing = true; ready = false
-        message = "Готовлю маленький мир…"
+        message = "Готую маленький світ…"
         defer { preparing = false }
         do {
             let url = try await render(pet: pet)
@@ -40,20 +40,20 @@ final class FloatingCat: NSObject, ObservableObject, AVPictureInPictureControlle
             player.volume = 0
             player.play()
             identity = key
-            message = "Нажми «Поверх приложений», затем открой Telegram или Safari"
-        } catch { message = "Не удалось подготовить окно: \(error.localizedDescription)" }
+            message = "Натисни «Поверх застосунків», потім відкрий Telegram або Safari"
+        } catch { message = "Не вдалося підготувати вікно: \(CatLanguage.error(error))" }
     }
 
     func toggle() {
-        guard let controller else { message = "Плавающее видео недоступно на этом устройстве"; return }
+        guard let controller else { message = "Плавуче відео недоступне на цьому пристрої"; return }
         do {
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .moviePlayback, options: [.mixWithOthers])
             try AVAudioSession.sharedInstance().setActive(true)
             player.play()
-        } catch { message = "Не удалось включить видео: \(error.localizedDescription)"; return }
+        } catch { message = "Не вдалося ввімкнути відео: \(CatLanguage.error(error))"; return }
         if active { controller.stopPictureInPicture() }
         else if controller.isPictureInPicturePossible { controller.startPictureInPicture() }
-        else { message = "Подожди, пока видео станет готово, и нажми ещё раз" }
+        else { message = "Зачекай, поки відео буде готове, і натисни ще раз" }
     }
 
     private func render(pet: Pet) async throws -> URL {
@@ -107,18 +107,18 @@ final class FloatingCat: NSObject, ObservableObject, AVPictureInPictureControlle
 
     enum VideoError: LocalizedError {
         case failed
-        var errorDescription: String? { "Не получилось создать видео котика" }
+        var errorDescription: String? { "Не вдалося створити відео котика" }
     }
 
     nonisolated func pictureInPictureControllerDidStartPictureInPicture(_ controller: AVPictureInPictureController) {
-        Task { @MainActor in self.active = true; self.message = "Котик рядом. Окно можно перемещать и менять его размер." }
+        Task { @MainActor in self.active = true; self.message = "Котик поруч. Вікно можна переміщувати та змінювати його розмір." }
     }
     nonisolated func pictureInPictureControllerDidStopPictureInPicture(_ controller: AVPictureInPictureController) {
         Task { @MainActor in self.active = false }
     }
     nonisolated func pictureInPictureController(_ controller: AVPictureInPictureController, failedToStartPictureInPictureWithError error: Error) {
-        let text = error.localizedDescription
-        Task { @MainActor in self.message = "Не удалось открыть PiP: \(text)" }
+        let text = CatLanguage.error(error)
+        Task { @MainActor in self.message = "Не вдалося відкрити PiP: \(text)" }
     }
     nonisolated func pictureInPictureController(_ controller: AVPictureInPictureController, restoreUserInterfaceForPictureInPictureStopWithCompletionHandler completionHandler: @escaping (Bool) -> Void) {
         completionHandler(true)
@@ -182,21 +182,21 @@ struct FloatingCatCard: View {
         VStack(alignment: .leading, spacing: 14) {
             HStack {
                 Image(systemName: "pip.enter").foregroundStyle(CatTheme.rose)
-                Text("Возьми меня с собой").font(.system(.title2, design: .serif))
+                Text("Візьми мене із собою").font(.system(.title2, design: .serif))
             }
-            Text("Маленький живой мир поверх Telegram, Safari и других приложений.")
+            Text("Маленький живий світ поверх Telegram, Safari та інших застосунків.")
                 .font(.system(size: 12)).foregroundStyle(.secondary)
             ZStack {
                 CatVideoSurface(floating: floating)
-                if floating.preparing { CatTheme.paper.opacity(0.9); ProgressView("Готовлю котика…").tint(CatTheme.rose) }
+                if floating.preparing { CatTheme.paper.opacity(0.9); ProgressView("Готую котика…").tint(CatTheme.rose) }
             }.aspectRatio(1.6, contentMode: .fit).clipShape(RoundedRectangle(cornerRadius: 22))
             Button { floating.toggle() } label: {
-                Label(floating.active ? "Вернуть в домик" : "Поверх приложений", systemImage: floating.active ? "pip.exit" : "pip.enter")
+                Label(floating.active ? "Повернути до хатинки" : "Поверх застосунків", systemImage: floating.active ? "pip.exit" : "pip.enter")
                     .font(.system(size: 13, weight: .semibold)).foregroundStyle(.white).padding(16).frame(maxWidth: .infinity)
                     .background(CatTheme.rose, in: Capsule())
             }.disabled(floating.preparing)
             Text(floating.message).font(.system(size: 10)).foregroundStyle(CatTheme.rose)
-            Text("Это плавающее видео PiP: окно можно двигать пальцем. iOS задаёт рамку, расположение и кнопки. Видео без звука; уход и игры остаются в домике.")
+            Text("Це плавуче відео PiP: вікно можна пересувати пальцем. iOS визначає рамку, розташування та кнопки. Відео без звуку; догляд та ігри залишаються в хатинці.")
                 .font(.system(size: 9)).foregroundStyle(.secondary)
         }.softCard()
         .task(id: "\(model.pet.coat)-\(model.pet.room)-\(model.pet.hat)-\(model.pet.sleeping)") { await floating.prepare(pet: model.pet) }

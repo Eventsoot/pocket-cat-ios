@@ -35,3 +35,11 @@ assert "secrets." not in workflow
 assert "contents: read" in workflow
 print("OK: basic build avoids extension entitlements; cloud workflow needs no signing secrets.")
 print("Swift compilation and device checks require Xcode on macOS.")
+for folder in ('App', 'Shared', 'Widgets'):
+    for path in (root / folder).glob('*.swift'):
+        source = path.read_text(encoding='utf-8')
+        assert not re.search('[ыэёъЫЭЁЪ]', source), f'Russian-only letters remain: {path}'
+        assert 'localizedDescription' not in source, f'Untranslated system error: {path}'
+assert config.count('CFBundleDevelopmentRegion: uk') == 2
+assert 'CFBundleLocalizations: [uk]' in basic
+print('OK: Ukrainian application and widget language, source text audit, localized error handling.')

@@ -8,20 +8,20 @@ struct FishingView: View {
     @State private var lastTick = Date()
     @State private var castX = 0.62
     private let clock = Timer.publish(every: 1.0 / 30, on: .main, in: .common).autoconnect()
-    private let names = ["Карась", "Окунь", "Форель", "Золотая рыбка"]
+    private let names = ["Карась", "Окунь", "Форель", "Золота рибка"]
     private let colors: [Color] = [Color(hex: 0xC4A47C), Color(hex: 0x8DA68C), Color(hex: 0xC78FAD), Color(hex: 0xE5B64E)]
 
     var body: some View {
         ScrollView {
             VStack(spacing: 18) {
                 HStack {
-                    Button { dismiss() } label: { Image(systemName: "chevron.down").padding(12).background(.white, in: Circle()) }.accessibilityLabel("Вернуться к котику")
+                    Button { dismiss() } label: { Image(systemName: "chevron.down").padding(12).background(.white, in: Circle()) }.accessibilityLabel("Повернутися до котика")
                     Spacer()
-                    Label("\(model.pet.fish) в запасе", systemImage: "fish.fill").font(.system(.subheadline, design: .rounded).bold())
+                    Label("\(model.pet.fish) у запасі", systemImage: "fish.fill").font(.system(.subheadline, design: .rounded).bold())
                 }
                 VStack(spacing: 7) {
-                    Text("Тихая река").font(.system(size: 34, weight: .medium, design: .serif))
-                    Text("Поймай обед для своего маленького друга.").font(.system(size: 12)).foregroundStyle(.secondary)
+                    Text("Тиха річка").font(.system(size: 34, weight: .medium, design: .serif))
+                    Text("Спіймай обід для свого маленького друга.").font(.system(size: 12)).foregroundStyle(.secondary)
                 }
                 river.frame(height: 310).clipShape(RoundedRectangle(cornerRadius: 28))
                 Text(instruction).font(.system(size: 15, weight: .semibold, design: .rounded)).multilineTextAlignment(.center).frame(minHeight: 42)
@@ -32,10 +32,10 @@ struct FishingView: View {
                         .padding(20).frame(maxWidth: .infinity).foregroundStyle(.white)
                         .background(round.phase == .bite ? Color(hex: 0x7A9D8C) : CatTheme.rose, in: Capsule())
                 }
-                Text("1. Забрось удочку и дождись всплеска.\n2. Нажми «Подсечь», пока поплавок клюёт.\n3. Тяни, когда бегунок в зелёной зоне — три удачных раза.")
+                Text("1. Закинь вудку й дочекайся сплеску.\n2. Натисни «Підсікти», поки клює.\n3. Тягни, коли бігунок у зеленій зоні — три вдалі рази.")
                     .font(.system(size: 11)).foregroundStyle(.secondary).frame(maxWidth: .infinity, alignment: .leading)
                 journal
-                Text("Пойманную рыбку можно скормить котику в домике. Один улов — одно кормление.")
+                Text("Спійманою рибкою можна нагодувати котика в хатинці. Один улов — одне годування.")
                     .font(.system(size: 11)).foregroundStyle(.secondary).multilineTextAlignment(.center)
             }.padding(22)
         }.background(CatTheme.paper.ignoresSafeArea()).foregroundStyle(CatTheme.ink)
@@ -54,22 +54,22 @@ struct FishingView: View {
 
     private var instruction: String {
         switch round.phase {
-        case .idle: return "Котик ждёт рыбку. Забросим удочку?"
-        case .waiting: return "Тс-с… ждём поклёвку. Не тяни раньше времени."
-        case .bite: return "Клюёт! Подсекай сейчас!"
-        case .reeling: return "Не спеши: лови зелёную зону!"
-        case .caught: return "\(names[round.species]) в корзинке! +1 рыбка для котика"
-        case .escaped: return "Рыбка ускользнула. Попробуем ещё раз?"
+        case .idle: return "Котик чекає на рибку. Закинемо вудку?"
+        case .waiting: return "Тс-с… чекаємо на клювання. Не тягни завчасно."
+        case .bite: return "Клює! Підсікай зараз!"
+        case .reeling: return "Не поспішай: лови зелену зону!"
+        case .caught: return "\(names[round.species]) у кошику! +1 рибка для котика"
+        case .escaped: return "Рибка втекла. Спробуємо ще раз?"
         }
     }
     private var buttonTitle: String {
         switch round.phase {
-        case .idle: return "Забросить удочку"
-        case .waiting: return "Вытащить раньше времени"
-        case .bite: return "Подсечь!"
-        case .reeling: return "Тянуть! · \(round.pulls)/3"
-        case .caught: return "Поймать ещё"
-        case .escaped: return "Закинуть снова"
+        case .idle: return "Закинути вудку"
+        case .waiting: return "Витягнути завчасно"
+        case .bite: return "Підсікти!"
+        case .reeling: return "Тягнути! · \(round.pulls)/3"
+        case .caught: return "Спіймати ще"
+        case .escaped: return "Закинути знову"
         }
     }
 
@@ -81,8 +81,8 @@ struct FishingView: View {
                     Rectangle().fill(CatTheme.sage).frame(width: g.size.width * 0.36).offset(x: g.size.width * 0.32)
                     Capsule().fill(CatTheme.ink).frame(width: 7, height: 31).offset(x: (g.size.width - 7) * round.marker)
                 }.clipShape(Capsule())
-            }.frame(height: 28).accessibilityLabel("Бегунок \(round.inZone ? "в зелёной зоне" : "вне зелёной зоны")")
-            HStack { Text("Натяжение лески"); Spacer(); Text("\(Int(round.tension))%") }.font(.system(size: 10))
+            }.frame(height: 28).accessibilityLabel("Бігунок \(round.inZone ? "у зеленій зоні" : "поза зеленою зоною")")
+            HStack { Text("Натяг волосіні"); Spacer(); Text("\(Int(round.tension))%") }.font(.system(size: 10))
             ProgressView(value: round.tension, total: 100).tint(round.tension > 70 ? CatTheme.rose : CatTheme.sage)
         }
     }
@@ -142,7 +142,7 @@ struct FishingView: View {
 
     private var journal: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Text("Твой рыбацкий альбом").font(.system(.headline, design: .rounded))
+            Text("Твій рибальський альбом").font(.system(.headline, design: .rounded))
             HStack(spacing: 8) {
                 ForEach(0..<4) { index in
                     VStack(spacing: 8) {
@@ -175,7 +175,7 @@ struct FishingView: View {
         if round.phase == .bite { model.feedback("bite") }
         if let species = round.claimCatch() {
             model.change { $0.catchFish(species: species) }
-            model.message = "Поймали \(names[species].lowercased())! Котик ждёт угощение."
+            model.message = "Улов: \(names[species])! Котик чекає на частування."
             model.feedback(species == 3 ? "victory" : "sparkle")
         }
         if round.phase == .escaped { model.feedback("water") }
@@ -190,9 +190,9 @@ struct FishingCard: View {
             HStack(spacing: 16) {
                 Image(systemName: "water.waves").font(.system(size: 35)).foregroundStyle(Color(hex: 0x72A7AE)).frame(width: 65)
                 VStack(alignment: .leading, spacing: 7) {
-                    Text("Рыбалка с котиком").font(.system(.headline, design: .rounded))
-                    Text("Поймай рыбку у реки и накорми друга").font(.system(size: 11)).foregroundStyle(.secondary)
-                    Text("В запасе: \(model.pet.fish) · 4 вида рыб").font(.system(size: 11, weight: .semibold)).foregroundStyle(CatTheme.rose)
+                    Text("Риболовля з котиком").font(.system(.headline, design: .rounded))
+                    Text("Спіймай рибку біля річки й нагодуй друга").font(.system(size: 11)).foregroundStyle(.secondary)
+                    Text("У запасі: \(model.pet.fish) · 4 види риб").font(.system(size: 11, weight: .semibold)).foregroundStyle(CatTheme.rose)
                 }
                 Spacer(minLength: 0)
             }.softCard()

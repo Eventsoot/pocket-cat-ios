@@ -9,21 +9,21 @@ struct CatAdventureView: View {
     @State private var lastTick = Date()
     @State private var rewarded = false
     private let clock = Timer.publish(every: 1.0 / 60, on: .main, in: .common).autoconnect()
-    private let worlds = ["Сад желаний", "Лунные крыши", "Облачный берег"]
+    private let worlds = ["Сад бажань", "Місячні дахи", "Хмарний берег"]
 
     var body: some View {
         VStack(spacing: 18) {
             HStack {
                 Button { dismiss() } label: { Image(systemName: "xmark").padding(12).background(.white.opacity(0.8), in: Circle()) }
-                    .accessibilityLabel("Выйти из игры")
+                    .accessibilityLabel("Вийти з гри")
                 Spacer()
-                Text("Кошачье путешествие").font(.system(.headline, design: .rounded))
+                Text("Котяча подорож").font(.system(.headline, design: .rounded))
                 Spacer()
                 Button {
                     if game.phase == .running { game.phase = .paused }
                     else if game.phase == .paused { lastTick = .now; game.phase = .running }
                 } label: { Image(systemName: game.phase == .paused ? "play.fill" : "pause.fill").padding(12).background(.white.opacity(0.8), in: Circle()) }
-                    .disabled(game.phase != .running && game.phase != .paused).accessibilityLabel("Пауза или продолжить")
+                    .disabled(game.phase != .running && game.phase != .paused).accessibilityLabel("Пауза або продовжити")
             }
             HStack {
                 Text(String(repeating: "♥", count: max(0, game.lives))).foregroundStyle(CatTheme.rose)
@@ -62,10 +62,10 @@ struct CatAdventureView: View {
             }.aspectRatio(390.0 / 460, contentMode: .fit)
                 .clipShape(RoundedRectangle(cornerRadius: 28))
             Button { jump() } label: {
-                Label("Прыжок", systemImage: "arrow.up").font(.system(.headline, design: .rounded))
+                Label("Стрибок", systemImage: "arrow.up").font(.system(.headline, design: .rounded))
                     .frame(maxWidth: .infinity).padding(20).foregroundStyle(.white).background(CatTheme.rose, in: Capsule())
             }.disabled(game.phase != .running)
-            Text("Касайся поля или кнопки. Два касания — двойной прыжок.\nПерепрыгивай ящики, избегай птиц, собирай звёзды и сердечки.")
+            Text("Торкайся поля або кнопки. Два дотики — подвійний стрибок.\nПерестрибуй ящики, оминай птахів, збирай зірки та сердечка.")
                 .font(.system(size: 11)).foregroundStyle(.secondary).multilineTextAlignment(.center)
             Spacer(minLength: 0)
         }.padding(20).background(CatTheme.paper.ignoresSafeArea()).foregroundStyle(CatTheme.ink)
@@ -121,16 +121,16 @@ struct CatAdventureView: View {
 
     private var overlay: some View {
         VStack(spacing: 16) {
-            Text(game.phase == .ready ? "За звёздами!" : game.phase == .paused ? "Передохнём?" : game.phase == .won ? "Вы дошли до моря!" : "Ещё одно приключение?")
+            Text(game.phase == .ready ? "По зірки!" : game.phase == .paused ? "Перепочинемо?" : game.phase == .won ? "Ви дісталися моря!" : "Ще одна пригода?")
                 .font(.system(size: 25, weight: .semibold, design: .serif))
-            Text(game.phase == .ready ? "Три мира, один храбрый котик.\nДвойной прыжок поможет добраться дальше." : game.phase == .paused ? "Котик подождёт тебя." : "\(game.score) очков · \(game.stars) звёзд\nРекорд сохраняется на этом iPhone.")
+            Text(game.phase == .ready ? "Три світи, один хоробрий котик.\nПодвійний стрибок допоможе дістатися далі." : game.phase == .paused ? "Котик зачекає на тебе." : "\(game.score) очок · \(game.stars) зірок\nРекорд зберігається на цьому iPhone.")
                 .font(.system(size: 13)).multilineTextAlignment(.center)
             Button {
                 if game.phase == .paused { game.phase = .running }
                 else { game.start(); rewarded = false }
                 lastTick = .now; model.feedback("meow")
             } label: {
-                Text(game.phase == .paused ? "Продолжить" : game.phase == .ready ? "В путешествие" : "Играть снова")
+                Text(game.phase == .paused ? "Продовжити" : game.phase == .ready ? "У подорож" : "Грати знову")
                     .font(.system(size: 14, weight: .bold)).padding(16).foregroundStyle(.white).background(CatTheme.rose, in: Capsule())
             }.buttonStyle(.plain)
         }.padding(24).frame(width: 330).background(CatTheme.paper.opacity(0.97), in: RoundedRectangle(cornerRadius: 24))
@@ -150,9 +150,9 @@ struct CatAdventureCard: View {
             HStack(spacing: 16) {
                 PixelCat(color: CatTheme.coats[model.pet.coat], hat: model.pet.hat, happy: true).frame(width: 80, height: 75)
                 VStack(alignment: .leading, spacing: 7) {
-                    Text("Кошачье путешествие").font(.system(.headline, design: .rounded))
-                    Text("3 мира · двойной прыжок · звёзды · рекорды").font(.system(size: 11)).foregroundStyle(.secondary)
-                    Label("Начать приключение", systemImage: "play.fill").font(.system(size: 12, weight: .semibold)).foregroundStyle(CatTheme.rose)
+                    Text("Котяча подорож").font(.system(.headline, design: .rounded))
+                    Text("3 світи · подвійний стрибок · зірки · рекорди").font(.system(size: 11)).foregroundStyle(.secondary)
+                    Label("Почати пригоду", systemImage: "play.fill").font(.system(size: 12, weight: .semibold)).foregroundStyle(CatTheme.rose)
                 }
                 Spacer(minLength: 0)
             }.softCard()

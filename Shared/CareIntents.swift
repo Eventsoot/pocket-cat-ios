@@ -1,7 +1,7 @@
 import AppIntents
 
 struct FeedCatIntent: LiveActivityIntent {
-    static var title: LocalizedStringResource = "Покормить котика"
+    static var title: LocalizedStringResource = "Нагодувати котика"
     static var openAppWhenRun = false
     func perform() async throws -> some IntentResult {
         await PetStore.act(.feed)
@@ -10,7 +10,7 @@ struct FeedCatIntent: LiveActivityIntent {
 }
 
 struct PlayCatIntent: LiveActivityIntent {
-    static var title: LocalizedStringResource = "Поиграть с котиком"
+    static var title: LocalizedStringResource = "Пограти з котиком"
     static var openAppWhenRun = false
     func perform() async throws -> some IntentResult {
         await PetStore.act(.play)
@@ -19,7 +19,7 @@ struct PlayCatIntent: LiveActivityIntent {
 }
 
 struct PetCatIntent: LiveActivityIntent {
-    static var title: LocalizedStringResource = "Погладить котика"
+    static var title: LocalizedStringResource = "Погладити котика"
     static var openAppWhenRun = false
     func perform() async throws -> some IntentResult {
         await PetStore.act(.pet)
@@ -28,7 +28,7 @@ struct PetCatIntent: LiveActivityIntent {
 }
 
 struct SleepCatIntent: LiveActivityIntent {
-    static var title: LocalizedStringResource = "Уложить или разбудить котика"
+    static var title: LocalizedStringResource = "Укласти спати або розбудити котика"
     static var openAppWhenRun = false
     func perform() async throws -> some IntentResult {
         await PetStore.act(.sleep)

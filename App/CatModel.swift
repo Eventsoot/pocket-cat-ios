@@ -6,7 +6,7 @@ import UIKit
 @MainActor
 final class CatModel: ObservableObject {
     @Published var pet = PetStore.load().at(Date())
-    @Published var message = "Твой маленький мир, полный мурчания"
+    @Published var message = "Твій маленький світ, сповнений муркотіння"
     @Published var activityRunning = !ActivityBridge.isEmpty
     private var players: [AVAudioPlayer] = []
     private var ticks = 0
@@ -20,7 +20,7 @@ final class CatModel: ObservableObject {
     func refresh() {
         let previous = pet.focusSessions
         pet = PetStore.load().at(Date())
-        if pet.focusSessions > previous { message = "Отличный фокус! Награда уже в копилке ✦" }
+        if pet.focusSessions > previous { message = "Чудова зосередженість! Нагорода вже в скарбничці ✦" }
         PetStore.save(pet)
         activityRunning = !ActivityBridge.isEmpty
         Task { await CatActivity.sync(pet) }
@@ -36,18 +36,18 @@ final class CatModel: ObservableObject {
 
     @discardableResult func care(_ action: CatAction) -> Bool {
         if action == .feed && pet.fish == 0 {
-            message = "Рыбка закончилась. Пойдём ловить её у реки!"; return false
+            message = "Рибка закінчилася. Ходімо ловити її біля річки!"; return false
         }
         change { $0.care(action) }
         let response: String
         let sound: String
         switch action {
-        case .feed: response = "Хрум-хрум. Самая вкусная рыбка!"; sound = "crunch"
-        case .pet: response = ["Мур-р-р… ещё за ушком ♡", "Ты мой любимый человек", "Я бы выбрал тебя снова", "Счастье — это твои ладошки"].randomElement()!; sound = "purr"
-        case .sleep: response = pet.sleeping ? "Разбудишь, когда соскучишься?" : "Доброе утро, мой человек!"; sound = pet.sleeping ? "sleep" : "meow"
-        case .play: response = "Давай ловить звёздочки!"; sound = "meow"
-        case .brush: response = "Теперь я самый пушистый на свете"; sound = "purr"
-        case .drink: response = "Буль-буль. Свежая водичка!"; sound = "water"
+        case .feed: response = "Хрум-хрум. Найсмачніша рибка!"; sound = "crunch"
+        case .pet: response = ["Мур-р-р… ще за вушком ♡", "Ти моя улюблена людина", "Я б знову обрав тебе", "Щастя — це твої долоньки"].randomElement()!; sound = "purr"
+        case .sleep: response = pet.sleeping ? "Розбудиш, коли скучиш?" : "Доброго ранку, моя людино!"; sound = pet.sleeping ? "sleep" : "meow"
+        case .play: response = "Нумо ловити зірочки!"; sound = "meow"
+        case .brush: response = "Тепер я найпухнастіший у світі"; sound = "purr"
+        case .drink: response = "Буль-буль. Свіжа водичка!"; sound = "water"
         }
         message = response
         feedback(sound)
@@ -68,7 +68,7 @@ final class CatModel: ObservableObject {
             let player = try AVAudioPlayer(contentsOf: url)
             player.volume = sound == "purr" ? 0.6 : 0.4
             players.append(player); player.play()
-        } catch { message = "Звук недоступен. Котик всё равно рад тебе ♡" }
+        } catch { message = "Звук недоступний. Котик однаково радий тобі ♡" }
     }
 
     func silence() { players.forEach { $0.stop() }; players.removeAll() }
@@ -79,8 +79,8 @@ final class CatModel: ObservableObject {
                 if activityRunning { await CatActivity.stop() }
                 else { try CatActivity.start(pet) }
                 activityRunning = !ActivityBridge.isEmpty
-                message = activityRunning ? "Котик поселился на экране блокировки" : "Котик вернулся в домик"
-            } catch { message = error.localizedDescription }
+                message = activityRunning ? "Котик оселився на екрані блокування" : "Котик повернувся до хатинки"
+            } catch { message = CatLanguage.error(error) }
         }
     }
 }

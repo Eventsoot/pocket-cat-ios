@@ -79,6 +79,6 @@ struct PixelCat: View {
             } else if hat == 3 {
                 var crown = Path(); crown.move(to: CGPoint(x: 57,y: 26)); crown.addLine(to: CGPoint(x: 53,y: 6)); crown.addLine(to: CGPoint(x: 69,y: 15)); crown.addLine(to: CGPoint(x: 80,y: 1)); crown.addLine(to: CGPoint(x: 90,y: 15)); crown.addLine(to: CGPoint(x: 105,y: 6)); crown.addLine(to: CGPoint(x: 101,y: 26)); crown.closeSubpath(); shape(crown,Color(hex: 0xEDCC7E)); oval(77,17,5,5,CatTheme.rose,stroke: false)
             }
-        }.accessibilityLabel(sleeping ? "Спящий котик" : "Котик с мягкими лапками")
+        }.accessibilityLabel(sleeping ? "Сплячий котик" : "Котик із м’якими лапками")
     }
 }

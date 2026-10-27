@@ -47,6 +47,6 @@ struct LegacyPixelCat: View {
                 block(6, 1, 1, 3, .yellow); block(9, 0, 1, 4, .yellow); block(12, 1, 1, 3, .yellow); block(6, 3, 7, 1, .orange)
             }
         }
-        .accessibilityLabel(sleeping ? "Котик спит" : "Твой пиксельный котик")
+        .accessibilityLabel(sleeping ? "Котик спить" : "Твій піксельний котик")
     }
 }

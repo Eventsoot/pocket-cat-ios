@@ -4,7 +4,7 @@ import AVKit
 /// A device experiment: a clear video-call content view is not a guarantee
 /// that the system PiP window underneath will also be transparent.
 @MainActor final class TransparentCatProbe: NSObject, ObservableObject, AVPictureInPictureControllerDelegate {
-    @Published var message = "Проверка другого механизма PiP. Прозрачность окна зависит от iOS."
+    @Published var message = "Перевірка іншого механізму PiP. Прозорість вікна залежить від iOS."
     @Published var active = false
     private var pip: AVPictureInPictureController?
     private var content: AVPictureInPictureVideoCallViewController?
@@ -14,7 +14,7 @@ import AVKit
     func attach(_ source: UIView, pet: Pet) {
         guard pip == nil, source.window != nil else { return }
         guard AVPictureInPictureController.isPictureInPictureSupported() else {
-            message = "Устройство не поддерживает PiP"; return
+            message = "Пристрій не підтримує PiP"; return
         }
         let vc = AVPictureInPictureVideoCallViewController()
         vc.preferredContentSize = CGSize(width: 240, height: 160)
@@ -33,13 +33,13 @@ import AVKit
     }
 
     func toggle() {
-        guard let pip else { message = "Прокрути до предпросмотра и попробуй ещё раз"; return }
+        guard let pip else { message = "Прокрути до попереднього перегляду й спробуй ще раз"; return }
         if active { pip.stopPictureInPicture(); return }
         guard !pending else { return }
         do {
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .moviePlayback, options: [.mixWithOthers])
             try AVAudioSession.sharedInstance().setActive(true)
-            pending = true; message = "Проверяю готовность системного окна…"
+            pending = true; message = "Перевіряю готовність системного вікна…"
             Task { @MainActor [weak self] in
                 for _ in 0..<20 {
                     guard let self, self.pending else { return }
@@ -49,20 +49,20 @@ import AVKit
                     try? await Task.sleep(for: .milliseconds(100))
                 }
                 self?.pending = false
-                self?.message = "iOS не разрешила запуск. Проверь Настройки → Основные → Картинка в картинке."
+                self?.message = "iOS не дозволила запуск. Перевір Параметри → Загальні → Картинка в картинці."
             }
-        } catch { message = "Не удалось запустить: \(error.localizedDescription)" }
+        } catch { message = "Не вдалося запустити: \(CatLanguage.error(error))" }
     }
 
     nonisolated func pictureInPictureControllerDidStartPictureInPicture(_ controller: AVPictureInPictureController) {
-        Task { @MainActor in self.active = true; self.message = "Открой другое приложение. Если вокруг котика чёрный фон — iOS сохранила непрозрачную подложку." }
+        Task { @MainActor in self.active = true; self.message = "Відкрий інший застосунок. Якщо навколо котика чорне тло — iOS залишила непрозору підкладку." }
     }
     nonisolated func pictureInPictureControllerDidStopPictureInPicture(_ controller: AVPictureInPictureController) {
         Task { @MainActor in self.active = false }
     }
     nonisolated func pictureInPictureController(_ controller: AVPictureInPictureController, failedToStartPictureInPictureWithError error: Error) {
-        let detail = error.localizedDescription
-        Task { @MainActor in self.active = false; self.message = "iOS отклонила запуск: \(detail)" }
+        let detail = CatLanguage.error(error)
+        Task { @MainActor in self.active = false; self.message = "iOS відхилила запуск: \(detail)" }
     }
     nonisolated func pictureInPictureController(_ controller: AVPictureInPictureController, restoreUserInterfaceForPictureInPictureStopWithCompletionHandler completionHandler: @escaping (Bool) -> Void) {
         completionHandler(true)
@@ -85,7 +85,10 @@ final class CatProbeSurface: UIView {
         cat.contents = renderer.cgImage
         cat.contentsScale = 2
     }
-    override func didMoveToWindow() { super.didMoveToWindow(); if window != nil { becameVisible?() } }
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        if window != nil { let callback = becameVisible; becameVisible = nil; callback?() }
+    }
     override func layoutSubviews() {
         super.layoutSubviews()
         cat.bounds = CGRect(x: 0, y: 0, width: min(100, bounds.width * 0.45), height: min(95, bounds.height * 0.75))
@@ -117,16 +120,16 @@ struct TransparentCatCard: View {
     @StateObject private var probe = TransparentCatProbe()
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Без фона · эксперимент").font(.system(.headline, design: .rounded))
+            Text("Без тла · експеримент").font(.system(.headline, design: .rounded))
             TransparentCatPreview(probe: probe, pet: model.pet).frame(height: 110)
                 .background(CatTheme.sage.opacity(0.12), in: RoundedRectangle(cornerRadius: 18))
             Button { probe.toggle() } label: {
-                Label(probe.active ? "Закрыть проверку" : "Проверить без фона", systemImage: "pip.enter")
+                Label(probe.active ? "Закрити перевірку" : "Перевірити без тла", systemImage: "pip.enter")
                     .font(.system(size: 13, weight: .semibold)).padding(15).frame(maxWidth: .infinity)
                     .foregroundStyle(.white).background(CatTheme.rose, in: Capsule())
             }
             Text(probe.message).font(.system(size: 11)).foregroundStyle(.secondary)
-            Text("Без джейлбрейка. Это проверка на устройстве, а не подтверждённый режим: рамка и движение окна остаются под управлением iOS.")
+            Text("Без джейлбрейка. Це перевірка на пристрої, а не підтверджений режим: рамкою та рухом вікна керує iOS.")
                 .font(.system(size: 10)).foregroundStyle(.secondary)
         }.softCard()
     }
