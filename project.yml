@@ -21,8 +21,8 @@ targets:
       path: App/Info.plist
       properties:
         CFBundleDisplayName: Мурчик
-        CFBundleShortVersionString: '2.1'
-        CFBundleVersion: '3'
+        CFBundleShortVersionString: '2.2'
+        CFBundleVersion: '4'
         UIBackgroundModes: [audio]
         UILaunchScreen: {}
         NSSupportsLiveActivities: true
@@ -47,8 +47,8 @@ targets:
       path: Widgets/Info.plist
       properties:
         CFBundleDisplayName: Мурчик
-        CFBundleShortVersionString: '2.1'
-        CFBundleVersion: '3'
+        CFBundleShortVersionString: '2.2'
+        CFBundleVersion: '4'
         NSExtension:
           NSExtensionPointIdentifier: com.apple.widgetkit-extension
     entitlements:

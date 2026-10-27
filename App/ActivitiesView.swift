@@ -67,6 +67,7 @@ struct PlayRoomView: View {
 
     var body: some View {
         VStack(spacing: 20) {
+            CatAdventureCard(model: model)
             CozyMiniGames(model: model)
             VStack(alignment: .leading, spacing: 14) {
                 HStack {

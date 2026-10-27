@@ -22,8 +22,8 @@ targets:
       path: App/Info.plist
       properties:
         CFBundleDisplayName: Мурчик
-        CFBundleShortVersionString: '2.1'
-        CFBundleVersion: '3'
+        CFBundleShortVersionString: '2.2'
+        CFBundleVersion: '4'
         UIBackgroundModes: [audio]
         UILaunchScreen: {}
         UIApplicationSceneManifest:

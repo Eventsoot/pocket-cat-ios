@@ -46,6 +46,11 @@ final class FloatingCat: NSObject, ObservableObject, AVPictureInPictureControlle
 
     func toggle() {
         guard let controller else { message = "Плавающее видео недоступно на этом устройстве"; return }
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .moviePlayback, options: [.mixWithOthers])
+            try AVAudioSession.sharedInstance().setActive(true)
+            player.play()
+        } catch { message = "Не удалось включить видео: \(error.localizedDescription)"; return }
         if active { controller.stopPictureInPicture() }
         else if controller.isPictureInPicturePossible { controller.startPictureInPicture() }
         else { message = "Подожди, пока видео станет готово, и нажми ещё раз" }
@@ -189,7 +194,7 @@ struct FloatingCatCard: View {
                 Label(floating.active ? "Вернуть в домик" : "Поверх приложений", systemImage: floating.active ? "pip.exit" : "pip.enter")
                     .font(.system(size: 13, weight: .semibold)).foregroundStyle(.white).padding(16).frame(maxWidth: .infinity)
                     .background(CatTheme.rose, in: Capsule())
-            }.disabled(floating.preparing || (!floating.ready && !floating.active))
+            }.disabled(floating.preparing)
             Text(floating.message).font(.system(size: 10)).foregroundStyle(CatTheme.rose)
             Text("Это плавающее видео PiP: окно можно двигать пальцем. iOS задаёт рамку, расположение и кнопки. Видео без звука; уход и игры остаются в домике.")
                 .font(.system(size: 9)).foregroundStyle(.secondary)

@@ -7,6 +7,7 @@ struct PixelCat: View {
     var color = Color(hex: 0xECAF7A)
     var hat = 0
     var happy = false
+    var blinking = false
 
     var body: some View {
         Canvas { c, size in
@@ -59,7 +60,7 @@ struct PixelCat: View {
             var inner2 = Path(); inner2.move(to: CGPoint(x: 117,y: 24)); inner2.addLine(to: CGPoint(x: 103,y: 35)); inner2.addLine(to: CGPoint(x: 121,y: 47)); inner2.closeSubpath(); shape(inner2, Color(hex: 0xD69A9E), stroke: false)
             oval(37, 73, 19, 10, Color(hex: 0xE6A4A1).opacity(0.65), stroke: false)
             oval(99, 73, 19, 10, Color(hex: 0xE6A4A1).opacity(0.65), stroke: false)
-            if happy {
+            if happy || blinking {
                 line([CGPoint(x: 48,y: 64),CGPoint(x: 55,y: 59),CGPoint(x: 62,y: 64)],width: 3)
                 line([CGPoint(x: 91,y: 64),CGPoint(x: 98,y: 59),CGPoint(x: 105,y: 64)],width: 3)
             } else {

@@ -35,3 +35,33 @@ expect(!pet.at(now.addingTimeInterval(86400)).missionsDone, "New day resets miss
 let encoded = try JSONEncoder().encode(pet), decoded = try JSONDecoder().decode(Pet.self, from: encoded)
 expect(decoded.coins == pet.coins && decoded.stars == 10 && decoded.missionClaimed, "New save round trip")
 print("PASS: migration, rewards, streak, sleep, XP limits, wardrobe, focus, missions and persistence.")
+
+var run = CatRun()
+expect(!run.jump(), "Cannot jump before starting")
+run.start()
+expect(run.jump() && run.jump() && !run.jump(), "Exactly two airborne jumps")
+for _ in 0..<150 { _ = run.step(1.0 / 60) }
+expect(run.height == 0 && run.jumps == 0 && run.jump(), "Landing restores jumps")
+run.phase = .paused
+let stoppedDistance = run.distance
+_ = run.step(1)
+expect(run.distance == stoppedDistance && !run.jump(), "Pause freezes physics and input")
+run.start(); run.items = [CatRun.Item(id: 99, kind: .star, x: 76, height: 25)]
+expect(run.step(1.0 / 60).contains("pickup") && run.stars == 1, "Collect star on contact")
+_ = run.step(1.0 / 60)
+expect(run.stars == 1, "Collected item cannot reward twice")
+run.items = [CatRun.Item(id: 100, kind: .crate, x: 76, height: 20)]
+_ = run.step(1.0 / 60)
+expect(run.lives == 2 && run.shield > 0, "Obstacle damages and grants recovery time")
+run.items = [CatRun.Item(id: 101, kind: .crate, x: 76, height: 20)]
+_ = run.step(1.0 / 60)
+expect(run.lives == 2, "Recovery protects against repeated collision")
+run.start(); run.lives = 1; run.items = [CatRun.Item(id: 102, kind: .crate, x: 76, height: 20)]
+_ = run.step(1.0 / 60)
+expect(run.phase == .lost && !run.jump(), "Last heart ends game")
+run.start(); run.distance = 5399
+_ = run.step(1.0 / 60)
+let wonScore = run.score
+_ = run.step(1.0 / 60)
+expect(run.phase == .won && run.score == wonScore && run.world == 2, "Three worlds and victory bonus exactly once")
+print("PASS: adventure jump limits, landing, pause, pickups, invulnerability, defeat and victory.")

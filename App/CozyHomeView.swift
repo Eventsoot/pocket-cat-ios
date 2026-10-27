@@ -84,6 +84,7 @@ struct CozyHomeView: View {
         VStack(spacing: 18) {
             roomCard
             FloatingCatCard(model: model)
+            TransparentCatCard(model: model)
             HStack(spacing: 10) {
                 need("Сытость", "fish.fill", model.pet.food, Color(hex: 0xCEA273))
                 need("Радость", "heart.fill", model.pet.joy, CatTheme.rose)
@@ -109,9 +110,7 @@ struct CozyHomeView: View {
                     Image(systemName: "arrow.triangle.2.circlepath").font(.caption)
                 }.accessibilityLabel("Сменить комнату")
             }.padding(16).background(Color(hex: 0xF4E8E0))
-            TimelineView(.animation(minimumInterval: 0.16, paused: scenePhase != .active)) { timeline in
-                CozyRoom(pet: model.pet, time: timeline.date, animated: true, onPet: { model.care(.pet) })
-            }.frame(height: 270)
+            InteractiveCatRoom(model: model).frame(height: 320)
             VStack(spacing: 7) {
                 Text(model.pet.mood(at: .now)).font(.system(size: 12, weight: .semibold, design: .rounded))
                 Text(model.message).font(.system(size: 10)).foregroundStyle(CatTheme.rose).multilineTextAlignment(.center).frame(minHeight: 25)
@@ -132,8 +131,6 @@ struct CozyHomeView: View {
 
     private var careButtons: some View {
         LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 10), count: 3), spacing: 10) {
-            careButton("Кормить", "fish.fill", .feed, 0xF2DFCA)
-            careButton("Гладить", "heart.fill", .pet, 0xF0DCE4)
             careButton(model.pet.sleeping ? "Разбудить" : "Спать", "moon.stars.fill", .sleep, 0xE6DFF0)
             careButton("Водичка", "drop.fill", .drink, 0xDDECF0)
             careButton("Причесать", "comb.fill", .brush, 0xE3E8D7)
