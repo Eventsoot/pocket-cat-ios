@@ -1,7 +1,7 @@
 import SwiftUI
 
 /// Original code-drawn artwork, shared by the app, widgets and Dynamic Island.
-struct PixelCat: View {
+struct LegacyPixelCat: View {
     var sleeping = false
     var frame = 0
     var color: Color = Color(red: 1, green: 0.71, blue: 0.43)
