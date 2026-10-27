@@ -20,12 +20,21 @@ jobs:
         uses: actions/checkout@v4
       - name: Install project generator
         run: brew install xcodegen
+      - name: Generate artwork and sounds
+        run: python3 scripts/make-assets.py
+      - name: Test pet progression and save migration
+        run: |
+          swiftc Shared/PetData.swift Tests/main.swift -o "$RUNNER_TEMP/pet-tests"
+          "$RUNNER_TEMP/pet-tests"
       - name: Check source structure
         run: python3 check_project.py
       - name: Compile and package unsigned IPA
         env:
           CAT_FLAVOR: ${{ matrix.flavor }}
         run: bash scripts/build-ios.sh "$CAT_FLAVOR"
+      - name: Render iPhone previews
+        if: matrix.flavor == 'widgets'
+        run: bash scripts/preview-ios.sh
       - name: Save IPA and build log
         if: always()
         uses: actions/upload-artifact@v4

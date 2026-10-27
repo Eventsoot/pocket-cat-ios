@@ -18,6 +18,7 @@ mkdir -p output
 build_root="$(mktemp -d "${TMPDIR:-/tmp}/pocketcat-${flavor}.XXXXXX")"
 trap 'rm -rf -- "$build_root"' EXIT
 
+python3 scripts/make-assets.py
 xcodegen generate --spec "$spec"
 xcodebuild -version | tee "output/toolchain-${flavor}.txt"
 xcodebuild \
@@ -37,6 +38,10 @@ test -f "$app/PocketCat"
 plutil -lint "$app/Info.plist"
 if [[ "$flavor" == widgets ]]; then
   test -d "$app/PlugIns/PocketCatWidgets.appex"
+  # Preserve requested permissions for subsequent sideload re-signing.
+  codesign --force --sign - --entitlements Widgets/PocketCatWidgets.entitlements "$app/PlugIns/PocketCatWidgets.appex"
+  codesign --force --sign - --entitlements App/PocketCat.entitlements "$app"
+  codesign -d --entitlements :- "$app" > "output/requested-entitlements.plist" 2>/dev/null
 else
   test ! -d "$app/PlugIns/PocketCatWidgets.appex"
 fi

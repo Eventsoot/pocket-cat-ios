@@ -17,3 +17,4 @@ App/PocketCat.entitlements
 Widgets/Info.plist
 Widgets/PocketCatWidgets.entitlements
 __pycache__/
+Resources/

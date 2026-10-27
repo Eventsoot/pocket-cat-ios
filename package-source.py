@@ -8,6 +8,7 @@ files = [root / name for name in [
     '.gitignore', 'project.yml', 'project-basic.yml', 'check_project.py',
     'package-source.py', 'README.md', 'INSTALL-WINDOWS.md',
     '.github/workflows/build-ios.yml', 'scripts/build-ios.sh',
+    'scripts/make-assets.py', 'scripts/preview-ios.sh', 'Tests/main.swift',
 ]]
 files += sorted((root / 'App').glob('*.swift'))
 files += sorted((root / 'Shared').glob('*.swift'))

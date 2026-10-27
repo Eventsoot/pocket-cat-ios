@@ -6,8 +6,9 @@ import ActivityKit
 @main
 struct CatWidgets: WidgetBundle {
     var body: some Widget {
-        CatHomeWidget()
-        CatLiveActivity()
+        CozyHomeWidget()
+        CatNeedsWidget()
+        CozyLiveActivity()
     }
 }
 

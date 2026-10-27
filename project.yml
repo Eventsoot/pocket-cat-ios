@@ -12,14 +12,17 @@ targets:
   PocketCat:
     type: application
     platform: iOS
-    sources: [App, Shared]
+    sources: [App, Shared, Resources]
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.example.PocketCat
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
     info:
       path: App/Info.plist
       properties:
         CFBundleDisplayName: Мурчик
+        CFBundleShortVersionString: '2.0'
+        CFBundleVersion: '2'
         UILaunchScreen: {}
         NSSupportsLiveActivities: true
         UIApplicationSceneManifest:
@@ -43,6 +46,8 @@ targets:
       path: Widgets/Info.plist
       properties:
         CFBundleDisplayName: Мурчик
+        CFBundleShortVersionString: '2.0'
+        CFBundleVersion: '2'
         NSExtension:
           NSExtensionPointIdentifier: com.apple.widgetkit-extension
     entitlements:
