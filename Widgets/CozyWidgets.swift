@@ -35,7 +35,7 @@ struct CozyWidgetView: View {
                     VStack { Spacer(); Text(entry.pet.mood(at: entry.date)).font(.system(size: 8, weight: .medium)).lineLimit(1).padding(5).background(CatTheme.paper.opacity(0.9), in: Capsule()).padding(.bottom, 3) }
                 }
                 HStack {
-                    Button(intent: FeedCatIntent()) { Image(systemName: "fish.fill") }.accessibilityLabel("Покормить")
+                    Button(intent: FeedCatIntent()) { Label("\(entry.pet.fish)", systemImage: "fish.fill") }.disabled(entry.pet.fish == 0).accessibilityLabel("Покормить. В запасе \(entry.pet.fish) рыбок")
                     Spacer()
                     Button(intent: PetCatIntent()) { Image(systemName: "heart.fill") }.accessibilityLabel("Погладить")
                 }.font(.system(size: 11)).buttonStyle(.plain).foregroundStyle(CatTheme.rose).padding(.horizontal, 24).padding(.vertical, 9)
@@ -57,7 +57,7 @@ struct CozyWidgetView: View {
                     }.font(.system(size: 10)).foregroundStyle(CatTheme.rose).padding(.horizontal, 18).padding(.vertical, 8)
                 }
                 HStack(spacing: 6) {
-                    Button(intent: FeedCatIntent()) { Label("Кормить", systemImage: "fish.fill") }
+                    Button(intent: FeedCatIntent()) { Label("Кормить · \(entry.pet.fish)", systemImage: "fish.fill") }.disabled(entry.pet.fish == 0)
                     Button(intent: PetCatIntent()) { Label("Гладить", systemImage: "heart.fill") }
                     Button(intent: SleepCatIntent()) { Image(systemName: entry.pet.sleeping ? "sun.max.fill" : "moon.fill") }.accessibilityLabel(entry.pet.sleeping ? "Разбудить" : "Спать")
                 }.font(.system(size: 10)).lineLimit(1).minimumScaleFactor(0.7).buttonStyle(.bordered).tint(CatTheme.rose).padding(.bottom, 9)

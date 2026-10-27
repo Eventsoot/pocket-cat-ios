@@ -34,7 +34,10 @@ final class CatModel: ObservableObject {
         Task { await CatActivity.sync(pet) }
     }
 
-    func care(_ action: CatAction) {
+    @discardableResult func care(_ action: CatAction) -> Bool {
+        if action == .feed && pet.fish == 0 {
+            message = "Рыбка закончилась. Пойдём ловить её у реки!"; return false
+        }
         change { $0.care(action) }
         let response: String
         let sound: String
@@ -48,6 +51,7 @@ final class CatModel: ObservableObject {
         }
         message = response
         feedback(sound)
+        return true
     }
 
     func feedback(_ sound: String) {

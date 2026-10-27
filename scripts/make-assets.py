@@ -26,6 +26,9 @@ sound('jump', .16, lambda t: .12 * math.sin(tau * (340 * t + 1300 * t * t)))
 sound('pickup', .20, lambda t: .12 * math.exp(-8 * t) * math.sin(tau * (880 if t < .09 else 1320) * t))
 sound('bump', .22, lambda t: .14 * math.exp(-12 * t) * math.sin(tau * (180 * t - 160 * t * t)))
 sound('victory', .9, lambda t: .11 * math.sin(math.pi * (t % .18) / .18) * math.sin(tau * [523, 659, 784, 1046, 1318][min(4, int(t / .18))] * t))
+sound('cast', .35, lambda t: .13 * random.uniform(-1, 1) * math.sin(math.pi * t / .35) * math.exp(-2 * t))
+sound('bite', .28, lambda t: .15 * math.exp(-6 * t) * math.sin(tau * (1250 * t + 300 * t * t)))
+sound('reel', .18, lambda t: .10 * math.sin(tau * 90 * t) * math.sin(tau * 620 * t) * math.exp(-7 * t))
 catalog = root / 'Assets.xcassets'
 icon = catalog / 'AppIcon.appiconset'
 icon.mkdir(parents=True, exist_ok=True)
@@ -55,4 +58,4 @@ def chunk(name, data):
 raw = b''.join(b'\0' + pixels[y * size * 3:(y + 1) * size * 3] for y in range(size))
 data = b'\x89PNG\r\n\x1a\n' + chunk(b'IHDR', struct.pack('!2I5B', size, size, 8, 2, 0, 0, 0)) + chunk(b'IDAT', zlib.compress(raw)) + chunk(b'IEND', b'')
 (icon / 'AppIcon.png').write_bytes(data)
-print('Created app icon and ten original synthesized WAV sounds.')
+print('Created app icon and thirteen original synthesized WAV sounds.')

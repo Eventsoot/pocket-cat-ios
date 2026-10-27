@@ -26,7 +26,7 @@ jobs:
         run: python3 scripts/make-assets.py
       - name: Test pet progression and save migration
         run: |
-          swiftc Shared/PetData.swift Shared/CatRun.swift Tests/main.swift -o "$RUNNER_TEMP/pet-tests"
+          swiftc Shared/PetData.swift Shared/CatRun.swift Shared/FishingRound.swift Tests/main.swift -o "$RUNNER_TEMP/pet-tests"
           "$RUNNER_TEMP/pet-tests"
       - name: Check source structure
         run: python3 check_project.py

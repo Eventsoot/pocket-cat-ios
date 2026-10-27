@@ -65,3 +65,32 @@ let wonScore = run.score
 _ = run.step(1.0 / 60)
 expect(run.phase == .won && run.score == wonScore && run.world == 2, "Three worlds and victory bonus exactly once")
 print("PASS: adventure jump limits, landing, pause, pickups, invulnerability, defeat and victory.")
+
+var fisher = FishingRound()
+fisher.cast(wait: 1, species: 2)
+expect(!fisher.hookOrPull() && fisher.phase == .escaped, "Early strike loses fish")
+fisher.cast(wait: 1, species: 2)
+for _ in 0..<26 { fisher.step(0.1) }
+expect(fisher.phase == .escaped, "Missed bite expires")
+fisher.cast(wait: 1, species: 2)
+for _ in 0..<11 { fisher.step(0.1) }
+expect(fisher.phase == .bite && fisher.hookOrPull(), "Strike during bite starts reeling")
+for _ in 0..<3 {
+    for _ in 0..<5 { fisher.step(0.1) }
+    var attempts = 0
+    while !fisher.inZone && attempts < 100 { fisher.step(0.05); attempts += 1 }
+    expect(fisher.hookOrPull(), "Timed pull in green zone succeeds")
+}
+expect(fisher.phase == .caught && fisher.claimCatch() == 2 && fisher.claimCatch() == nil, "Catch can be claimed exactly once")
+var hungry = Pet(); hungry.updated = now; hungry.food = 10; hungry.fish = 0
+hungry.care(.feed, at: now)
+expect(hungry.food == 10 && hungry.meals == 0, "Cannot feed without inventory")
+hungry.catchFish(species: 2, at: now)
+expect(hungry.fish == 1 && hungry.fishCaught[2] == 1, "Caught fish goes to inventory and journal")
+hungry.care(.feed, at: now)
+expect(hungry.fish == 0 && hungry.food == 32 && hungry.meals == 1, "Feeding consumes exactly one caught fish")
+let fishSave = try JSONDecoder().decode(Pet.self, from: JSONEncoder().encode(hungry))
+expect(fishSave.fish == 0 && fishSave.fishCaught[2] == 1, "Fish stock and journal survive save round trip")
+let oldFishSave = try JSONDecoder().decode(Pet.self, from: Data("{}".utf8))
+expect(oldFishSave.fish == 3 && oldFishSave.fishCaught.count == 4, "Old saves receive starter fish")
+print("PASS: fishing timing, reeling, one-time rewards, inventory feeding and fish save migration.")

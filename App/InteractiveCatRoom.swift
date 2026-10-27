@@ -11,6 +11,7 @@ struct InteractiveCatRoom: View {
     @State private var lastReward = Date.distantPast
     @State private var reactionUntil = Date.distantPast
     @State private var reaction = "♡"
+    @State private var fishing = false
 
     var body: some View {
         GeometryReader { geometry in
@@ -73,7 +74,7 @@ struct InteractiveCatRoom: View {
                         }.onEnded { value in
                             let landing = CGPoint(x: foodOrigin.x + value.translation.width, y: foodOrigin.y + value.translation.height)
                             if hypot(landing.x - center.x, landing.y - center.y) < 64 {
-                                model.care(.feed); respond("Хрум! ♡")
+                                if model.care(.feed) { respond("Хрум! ♡") } else { fishing = true }
                             }
                             withAnimation(reduceMotion ? nil : .spring(response: 0.35, dampingFraction: 0.7)) {
                                 foodOffset = .zero; draggingFood = false
@@ -81,12 +82,19 @@ struct InteractiveCatRoom: View {
                         })
                         .accessibilityLabel("Рыбка. Перетащи к котику, чтобы покормить")
                         .accessibilityAddTraits(.isButton)
-                        .accessibilityAction { model.care(.feed); respond("Хрум! ♡") }
+                        .accessibilityAction { if model.care(.feed) { respond("Хрум! ♡") } else { fishing = true } }
                         .position(foodPosition)
+                    Text("×\(model.pet.fish)").font(.system(size: 11, weight: .bold, design: .rounded))
+                        .foregroundStyle(CatTheme.ink).position(x: foodOrigin.x + 47, y: foodOrigin.y + 5).allowsHitTesting(false)
+                    Button { fishing = true } label: {
+                        Label("К реке", systemImage: "water.waves").font(.system(size: 10, weight: .semibold))
+                            .padding(10).background(.regularMaterial, in: Capsule())
+                    }.position(x: size.width - 52, y: size.height - 40)
                 }.clipped()
             }
         }
         .onDisappear { foodOffset = .zero; draggingFood = false; strokePoint = nil; strokeDistance = 0 }
+        .fullScreenCover(isPresented: $fishing) { FishingView(model: model) }
     }
 
     private func respond(_ text: String) {

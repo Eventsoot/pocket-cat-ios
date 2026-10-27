@@ -19,6 +19,8 @@ struct Pet: Codable {
     var xp = 0
     var strokes = 0
     var meals = 0
+    var fish = 3
+    var fishCaught = [0, 0, 0, 0]
     var games = 0
     var stars = 0
     var streak = 0
@@ -62,6 +64,9 @@ struct Pet: Codable {
         xp = try c.decodeIfPresent(Int.self, forKey: .xp) ?? xp
         strokes = try c.decodeIfPresent(Int.self, forKey: .strokes) ?? strokes
         meals = try c.decodeIfPresent(Int.self, forKey: .meals) ?? meals
+        fish = max(0, try c.decodeIfPresent(Int.self, forKey: .fish) ?? fish)
+        let catches = try c.decodeIfPresent([Int].self, forKey: .fishCaught) ?? fishCaught
+        fishCaught = (0..<4).map { catches.indices.contains($0) ? max(0, catches[$0]) : 0 }
         games = try c.decodeIfPresent(Int.self, forKey: .games) ?? games
         stars = try c.decodeIfPresent(Int.self, forKey: .stars) ?? stars
         streak = try c.decodeIfPresent(Int.self, forKey: .streak) ?? streak
@@ -103,8 +108,9 @@ struct Pet: Codable {
 
     mutating func care(_ action: CatAction, at date: Date = Date()) {
         self = at(date)
+        guard action != .feed || fish > 0 else { return }
         switch action {
-        case .feed: food = Self.clamp(food + 22); meals += 1; todayMeals += 1
+        case .feed: fish -= 1; food = Self.clamp(food + 22); meals += 1; todayMeals += 1
         case .play: joy = Self.clamp(joy + 15); energy = Self.clamp(energy - 4)
         case .sleep: sleeping.toggle()
         case .pet: joy = Self.clamp(joy + 6); strokes += 1; todayStrokes += 1
@@ -115,6 +121,14 @@ struct Pet: Codable {
         // Care earns XP at most once per 20 seconds, regardless of tap speed.
         if date.timeIntervalSince(actionDate) >= 20 { xp += 3 }
         lastAction = action; actionDate = date
+    }
+
+    mutating func catchFish(species: Int, at date: Date = Date()) {
+        guard (0..<4).contains(species) else { return }
+        self = at(date)
+        fish += 1; fishCaught[species] += 1
+        xp += 3 + species; coins += 2 + species
+        games += 1; todayGames += 1
     }
 
     mutating func completeGame(score: Int, at date: Date = Date()) {
