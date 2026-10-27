@@ -11,7 +11,7 @@ expect(pet.claimGift(at: now), "Daily gift available")
 let coins = pet.coins
 expect(!pet.claimGift(at: now.addingTimeInterval(60)) && pet.coins == coins, "No duplicate gift")
 expect(pet.claimGift(at: now.addingTimeInterval(86400)) && pet.streak == 2, "Consecutive-day streak")
-pet.updated = now; pet.sleeping = true; pet.energy = 30
+pet = Pet(); pet.updated = now; pet.sleeping = true; pet.energy = 30
 let rested = pet.at(now.addingTimeInterval(3600))
 expect(rested.energy == 46 && rested.food < pet.food, "Sleep restores energy with offline decay")
 pet = Pet(); pet.updated = now
