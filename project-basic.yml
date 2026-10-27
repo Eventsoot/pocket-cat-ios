@@ -1,0 +1,31 @@
+name: PocketCat
+options:
+  bundleIdPrefix: com.example
+  deploymentTarget:
+    iOS: '17.0'
+settings:
+  base:
+    SWIFT_VERSION: '5.0'
+    TARGETED_DEVICE_FAMILY: '1'
+    DEVELOPMENT_TEAM: ''
+    SWIFT_ACTIVE_COMPILATION_CONDITIONS: '$(inherited) BASIC_BUILD'
+targets:
+  PocketCat:
+    type: application
+    platform: iOS
+    sources: [App, Shared]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.PocketCat
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDisplayName: Мурчик
+        UILaunchScreen: {}
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+schemes:
+  PocketCat:
+    build:
+      targets:
+        PocketCat: all

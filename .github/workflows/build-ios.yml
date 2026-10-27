@@ -1,0 +1,36 @@
+name: Build iPhone app
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: iPhone — ${{ matrix.flavor }}
+    runs-on: macos-15
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        flavor: [basic, widgets]
+    steps:
+      - name: Download source
+        uses: actions/checkout@v4
+      - name: Install project generator
+        run: brew install xcodegen
+      - name: Check source structure
+        run: python3 check_project.py
+      - name: Compile and package unsigned IPA
+        env:
+          CAT_FLAVOR: ${{ matrix.flavor }}
+        run: bash scripts/build-ios.sh "$CAT_FLAVOR"
+      - name: Save IPA and build log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: PocketCat-${{ matrix.flavor }}-unsigned
+          path: output/
+          if-no-files-found: error
+          retention-days: 7
