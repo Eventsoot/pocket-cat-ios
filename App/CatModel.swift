@@ -54,7 +54,10 @@ final class CatModel: ObservableObject {
         if pet.hapticsEnabled { UIImpactFeedbackGenerator(style: .soft).impactOccurred() }
         guard pet.soundEnabled, let url = Bundle.main.url(forResource: sound, withExtension: "wav") else { return }
         do {
-            try AVAudioSession.sharedInstance().setCategory(.ambient, mode: .default)
+            // Do not replace the playback session while the floating cat uses it.
+            if AVAudioSession.sharedInstance().category != .playback {
+                try AVAudioSession.sharedInstance().setCategory(.ambient, mode: .default)
+            }
             try AVAudioSession.sharedInstance().setActive(true)
             players.removeAll { !$0.isPlaying }
             if players.count >= 3 { players.removeFirst().stop() }

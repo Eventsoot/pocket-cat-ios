@@ -157,5 +157,6 @@ struct CatAdventureCard: View {
                 Spacer(minLength: 0)
             }.softCard()
         }.buttonStyle(.plain).fullScreenCover(isPresented: $showing) { CatAdventureView(model: model) }
+            .task { if ProcessInfo.processInfo.arguments.contains("--preview-game") { showing = true } }
     }
 }

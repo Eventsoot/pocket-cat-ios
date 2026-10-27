@@ -18,4 +18,7 @@ for tab in 0 1 2; do
   sleep 10
   xcrun simctl io "$device" screenshot "output/iphone13-tab-${tab}.png"
 done
+xcrun simctl launch --terminate-running-process "$device" com.example.PocketCat --preview-tab=1 --preview-game
+sleep 5
+xcrun simctl io "$device" screenshot "output/iphone13-adventure.png"
 echo 'Captured actual iPhone 13 Pro Max simulator screens.'
