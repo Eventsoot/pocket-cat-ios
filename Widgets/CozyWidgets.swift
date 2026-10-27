@@ -25,7 +25,7 @@ struct CozyWidgetView: View {
         VStack(spacing: 0) {
             HStack(spacing: 5) {
                 Image(systemName: "pawprint.fill").foregroundStyle(CatTheme.rose).font(.system(size: 10))
-                Text(entry.pet.name).font(.system(size: 12, weight: .bold, design: .rounded)).lineLimit(1)
+                Text(entry.pet.name).font(.system(size: 12, weight: .bold, design: .rounded)).lineLimit(1).minimumScaleFactor(0.7)
                 Spacer(minLength: 0)
                 if !small { Text("LV \(entry.pet.level)").font(.system(size: 8, weight: .semibold)).foregroundStyle(CatTheme.rose) }
             }.padding(.horizontal, 15).padding(.top, 12).padding(.bottom, 5)
@@ -56,11 +56,11 @@ struct CozyWidgetView: View {
                         Text("\(entry.pet.coins) ✦")
                     }.font(.system(size: 10)).foregroundStyle(CatTheme.rose).padding(.horizontal, 18).padding(.vertical, 8)
                 }
-                HStack(spacing: 10) {
+                HStack(spacing: 6) {
                     Button(intent: FeedCatIntent()) { Label("Кормить", systemImage: "fish.fill") }
                     Button(intent: PetCatIntent()) { Label("Гладить", systemImage: "heart.fill") }
                     Button(intent: SleepCatIntent()) { Image(systemName: entry.pet.sleeping ? "sun.max.fill" : "moon.fill") }.accessibilityLabel(entry.pet.sleeping ? "Разбудить" : "Спать")
-                }.font(.system(size: 10)).buttonStyle(.bordered).tint(CatTheme.rose).padding(.bottom, 9)
+                }.font(.system(size: 10)).lineLimit(1).minimumScaleFactor(0.7).buttonStyle(.bordered).tint(CatTheme.rose).padding(.bottom, 9)
             }
         }.foregroundStyle(CatTheme.ink)
     }

@@ -83,6 +83,7 @@ struct CozyHomeView: View {
     private var home: some View {
         VStack(spacing: 18) {
             roomCard
+            FloatingCatCard(model: model)
             HStack(spacing: 10) {
                 need("Сытость", "fish.fill", model.pet.food, Color(hex: 0xCEA273))
                 need("Радость", "heart.fill", model.pet.joy, CatTheme.rose)

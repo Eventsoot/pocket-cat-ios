@@ -6,7 +6,7 @@ root = Path(__file__).resolve().parent
 destination = root.parent / 'PocketCat-GitHub-ready.zip'
 files = [root / name for name in [
     '.gitignore', 'project.yml', 'project-basic.yml', 'check_project.py',
-    'package-source.py', 'README.md', 'INSTALL-WINDOWS.md',
+    'package-source.py', 'README.md', 'INSTALL-WINDOWS.md', 'PIP-NOTES.md',
     '.github/workflows/build-ios.yml', 'scripts/build-ios.sh',
     'scripts/make-assets.py', 'scripts/preview-ios.sh', 'Tests/main.swift',
 ]]

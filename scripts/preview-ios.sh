@@ -15,7 +15,7 @@ xcrun simctl status_bar "$device" override --time '9:41' --dataNetwork wifi --wi
 xcrun simctl install "$device" "$build_root/Build/Products/Debug-iphonesimulator/PocketCat.app"
 for tab in 0 1 2; do
   xcrun simctl launch --terminate-running-process "$device" com.example.PocketCat "--preview-tab=$tab"
-  sleep 3
+  sleep 10
   xcrun simctl io "$device" screenshot "output/iphone13-tab-${tab}.png"
 done
 echo 'Captured actual iPhone 13 Pro Max simulator screens.'
